@@ -1,0 +1,1157 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+	  <link rel="shortcut icon" href="favicon.ico">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<meta charset="utf-8" />
+    <title>SALE.ro</title>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="/bower_components/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+	<script type="text/javascript" src="/bower_components/select2/dist/js/select2.min.js"></script>
+    <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/bower_components/uploadify/jquery.uploadify.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>-->
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>-->
+    <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />-->
+	<!-- <script type="text/javascript" src="/js/codes.js"></script> -->
+    <!-- <script src="/js/CPVmin.js"></script> -->
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <!-- <script src="/js/Time.js"> </script>
+    <script src="/js/Notifications.js"> </script>
+    <script src="/js/Chat.js"> </script>
+    <script src="/js/Home.js"> </script> -->
+    <script src="/js/Chat.js"> </script>
+    <script src="/js/Home.js"> </script>
+    <!-- <script src="/js/Favourite.js"> </script> -->
+    <!-- <script src="/js/test.js"> </script> -->
+    <script src="/js/Favourite.js"> </script>
+    <script src="/js/Notifications.js"> </script>
+    <script src="/js/Procedure.js"> </script>
+	<script type="text/javascript" src="/bower_components/jQuery-slimScroll-1.3.8/jquery.slimscroll.min.js"></script>
+  <link href="/bower_components/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+  <link href="/bower_components/uploadify/uploadify.css" rel="stylesheet" type="text/css"/>
+  <link href="/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css" />
+	<link rel="stylesheet" href="/bower_components/jquery-ui-1.12.1/jquery-ui.min.css"/>
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+	<!--<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel="stylesheet" type="text/css"/>-->
+	<link href="/stylesheets/style.css" rel="stylesheet" type="text/css"/>
+	<link href="/stylesheets/responsive.css" rel="stylesheet" type="text/css"/>
+	<link href="/stylesheets/custom-icon-set.css" rel="stylesheet" type="text/css"/>
+	<!-- <link href="/stylesheets/custom-icon-set.css" rel="stylesheet" type="text/css"/> -->
+
+
+	<!-- END CSS TEMPLATE -->
+
+	<!--[if lt IE 9]>
+      <!--<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>-->
+      <!--<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>-->
+    <![endif]-->
+  </head>
+	<!-- BEGIN BODY -->
+	<body class="error-body no-top wide">
+			<!-- BEGIN HEADER -->
+<div class="header navbar navbar-inverse wide">
+	<div class="container">
+		<div class="top-section pull-left" id="logo-box">
+			<a href="/"><img src="/img/logo.png" class="logo" alt=""  data-src="/img/logo.png" width="60" height="60"/></a>
+ 			<div id="time-container"><span id="servertime" class="server-time" class=""></span></div>
+		</div>
+    <!-- <form action="/api/upload/file" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+      Select an image to upload:
+      <input type="file" name="image">
+      <input type="submit" value="Upload Image">
+    </form> -->
+    <!-- <form enctype="multipart/form-data" action="/api/upload/file" method="post">
+      <input id="image-file" type="file" />
+      <input type="submit" value="Upload Image">
+    </form> -->
+    <!-- <form action="/api/upload/file" method="POST" enctype="multipart/form-data">
+      <label id="upload-file-info" class="btn btn-default btn-file">Select an image to upload:
+        <input style="display: none;" type="file"'>
+      </label>
+      <input type="submit" value="Upload Image">
+    </form> -->
+    <!-- <div class="input-group">
+  <span class="input-group-btn">
+    <span class="btn btn-primary" onclick="$(this).parent().find('input[type=file]').click();">Browse</span>
+    <input name="uploaded_file" onchange="$(this).parent().parent().find('.form-control').html($(this).val().split(/[\\|/]/).pop());" style="display: none;" type="file">
+  </span>
+  <span class="form-control"></span>
+</div> -->
+    <!-- <form action="/api/upload/file" method="POST" enctype="multipart/form-data">
+      Select an image to upload:
+
+      <a class='btn btn-primary' href='javascript:;'>
+          Choose File...
+          <input type="file" style='filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40"  onchange='$("#upload-file-info").html($(this).val());'>
+      </a>
+      &nbsp;
+      <input type="submit" value="Upload Image">
+    </form> -->
+
+    <!-- <div style="position:relative;">
+          <form action="/api/upload/file" method="POST" enctype="multipart/form-data">
+            <a class='btn btn-primary' href='javascript:;'>
+                Choose File...
+                <input type="file" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' name="file_source" size="40"  onchange='$("#upload-file-info").html($(this).val());'>
+            </a>
+            &nbsp;
+            <span class='label label-info' id="upload-file-info"></span>
+            </form>
+    </div> -->
+		<div class="top-section pull-left" id="stats-box">
+			<div  id="alerts-container" >
+					<ul id="alerts-list">
+						<li id="empty-message" class="empty-message">Nici o alerta recenta</li>
+					</ul>
+			</div>
+
+		</div>
+		<div class="top-section pull-left" id="menu-box">
+			<ul class="nav second-menu">
+				<li class="">
+					<a class=""><i class="icon-custom-chart"></i><% if (typeof User.Language !== 'undefined' && User.Language == 'EN') { %>&nbsp;&nbsp;About SALE<% }else { %>&nbsp;&nbsp;Despre SALE<% } %></a>
+				</li>
+				<li class="">
+					<a class=""><i class="fa fa-align-right"></i><% if (typeof User.Language !== 'undefined' && User.Language == 'EN') { %>&nbsp;&nbsp;Links<% }else { %>&nbsp;&nbsp;Linkuri utile<% } %></a>
+				</li>
+				<li class="">
+					<a class=""><i class="fa fa-bookmark"></i><% if (typeof User.Language !== 'undefined' && User.Language == 'EN') { %>&nbsp;&nbsp;Technical requests<% }else { %>&nbsp;&nbsp;Cerinte tehnice<% } %></a>
+				</li>
+				<li class="">
+					<a class=""><i class="fa fa-th-large"></i><% if (typeof User.Language !== 'undefined' && User.Language == 'EN') { %>&nbsp;&nbsp;Help<% }else { %>&nbsp;&nbsp;Ajutor<% } %></a>
+				</li>
+			</ul>
+		</div>
+		<div class="top-section pull-left" id="account-box">
+			<p class="account-header"><span class="muted"><% if (typeof User.Language !== 'undefined' && User.Language == 'EN') { %>Logged in as<% }else { %>Logat ca<% } %></span></p>
+			<p class="user-info"><strong><%=User.Language%><%=User.FirstName%> <%=User.LastName%></strong><br/><span class="italic"><%=User.CompanyName%></span></p>
+			<p class="user-account-link"><a href="/account"><i class="fa fa-user"></i> <strong>Contul meu</strong></a> | <a class="" href="/logout" title="Logout">Logout</a></p>
+		</div>
+	</div>
+</div>
+
+<!-- END HEADER -->
+
+		<!-- BEGIN CONTAINER -->
+		<div class="container wide">
+			<div class="page-container row-fluid">
+				<div class="page-content">
+					<div class="content">
+						<div class="row m-b-10">
+	<div class="col-md-3 col-sm-3">
+		<a class="btn btn-info" id="show-catalog" style="margin: 0 auto 10px auto;display: block;" onclick="btnShowCatalog()">Catalog Produse</a>
+		<a class="btn btn-success" id="show-procedures" onclick="btnShowAllProcedures()">Vezi toate procedurile</a>
+
+
+<div class="procedures" id="my-procedures-container">
+	<div id='toggle-my-procedures-container' class="tile m-b-10">
+		<div class="tile-title">
+			<div class="controller">
+				<a onclick="toggleDiv('toggle-my-procedures-container')" class="collapse pull-right m-l-15">&nbsp;</a>
+			</div>
+			<h4 id="my-procedures-title" class="m-t-0">Procedurile mele</h4>
+		</div>
+		<div class="tile-body">
+			<div id="my-procedures-loader" class="text-center padding-20 loader"><img src="/img/loader-white.gif"></div>
+			<div id="my-procedures-scroller" style="margin-right: 10px;">
+				<ul class="procedures-list" id="my-procedures-list">
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<a class="btn btn-primary btn-small" id="generate-procedure" onclick="btnCreateNewProcedure()">Procedura noua</a>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="procedures" id="favourite-procedures-container">
+	<div id="fav-loader-toggle" class="tile m-b-10 collapsed">
+		<div class="tile-title">
+			<div class="controller">
+				<a onclick=toggleDiv('fav-loader-toggle') class="collapse pull-right m-l-15">&nbsp;</a>
+			</div>
+			<h4 id="favourite-procedures-title" class="m-t-0">Proceduri urmarite</h4>
+		</div>
+		<div id="fav-show" class="tile-body" style="">
+			<div id="fav-loader" class="text-center padding-20 loader" style="display: none !important"><img src="/img/loader-white.gif"></div>
+			<div id="favourite-procedures-scroller" class="scroller" data-height="300px">
+				<ul class="procedures-list" id="favourite-procedures-list">
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>
+
+
+
+			<div class="tile white m-b-10" id="chat-container">
+	<div class="tile-title">
+		<div class="controller">
+			<a href="" class="extract pull-right m-l-15" title="Deschide in popup"><i class="fa fa-external-link"></i></a>
+		</div>
+		<h3 class="no-margin m-b-10"><i class="fa fa-comments"></i> Panou chat</h3>
+	</div>
+	<div class="tile-body">
+		<div class="chat-holder">
+			<div class="chat-box-holder">
+				<div class="chat-box scroller" data-height="250" style="overflow: auto">
+					<ul class="chat-list" id="chat-list">
+					</ul>
+					<div class="text-center padding-20 loader" style="display:none"><img src="/img/loader-white.gif"></div>
+				</div>
+			</div>
+
+			<div class="row no-margin">
+				<div class="col-md-12">
+					<input type="text" id="chat-input" placeholder="Mesajul tau.." autocomplete="off" onkeypress="addChatMessage(event);"/>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+	</div>
+	<div class="col-md-9 col-sm-9">
+<div id="procedureDetailToggle" style="display: none;"></div>
+<div class="tile m-b-10 data-container" id="procedures-container">
+	<div class="tile-title">
+		<h4 class="no-margin m-b-10">Proceduri disponibile</h4>
+		<br/>
+	</div>
+	<div class="tile-body">
+		<div class="list-filters">
+					<div class="row">
+					<div class="col-md-4 form-row">
+						<div class="widget-col">
+							<select name="ID_ContractType" id="filter-ID_ContractType" class="form-control">
+							  <option value="">Toate tipurile de contract</option>
+
+							  <option value="1">FURNIZARE</option>
+
+							  <option value="2">LUCRARI</option>
+
+							  <option value="3">SERVICII</option>
+
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4 form-row">
+						<div class="widget-col">
+							<select name="ID_ProcedureType" id="filter-ID_ProcedureType" class="form-control">
+							  <option value="">Toate tipurile de procedura</option>
+
+							  <option value="1">ACHIZITIE DIRECTA</option>
+
+							  <option value="2">CERERE OFERTA</option>
+
+							  <option value="3">LICITATIE DESCHISA</option>
+
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4 form-row">
+						<div class="widget-col">
+							<select name="ID_ProcedureCriterion" id="filter-ID_ProcedureCriterion" class="form-control">
+							  <option value="">Toate criteriile</option>
+
+							  <option value="1">ECONOMIC</option>
+
+							  <option value="2">TEHNIC</option>
+
+							  <option value="3">TEHNICO-ECONOMIC</option>
+
+							</select>
+						</div>
+					</div>
+					<div class="col-md-3 form-row">
+						<div class="widget-col">
+							<input class="form-control" type="text" name="ID_Cpv" id="filter-ID_Cpv" placeholder="Cod CPV" />
+						</div>
+					</div>
+					<div class="col-md-4 form-row">
+						<div class="widget-col">
+							<div class="input-group" id="filter-range">
+								<input type="text" class="form-control" name="start" id="filter-start" placeholder="Data inceput"/>
+								<span class="input-group-addon"></span>
+								<input type="text" class="form-control" name="end" id="filter-end" placeholder="Data sfarsit"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 form-row">
+						<div class="widget-col">
+							<input name="keyword" id="filter-keyword" type="text" class="form-control" placeholder="Nume..." />
+						</div>
+					</div>
+					<div class="col-md-2 form-row">
+						<button onclick=filterProcedures() class="btn btn-success" id="filter-procedures">Filtreaza</button>
+					</div>
+				</div>
+		</div>
+		<div id="procedures-loader" class="text-center padding-20 loader"><img src="/img/loader-white.gif"></div>
+		<ul class="procedures-list" id="procedures-list"></ul>
+	</div>
+</div>
+
+			<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display:none">
+	<div class="tile-title">
+		<h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name"></span></h5>
+		<br/>
+	</div>
+	<div class="tile-body">
+		<div class="row procedure-details-holder">
+			<div class="col-md-5">
+				<p id="detail-description" class="procedure-description"></p>
+				<div id="detail-documents" class="procedure-documents"></div>
+			</div>
+			<div class="col-md-6">
+				<div class="row">
+					<div class="col-md-2">
+						<span id="detail-type" class="procedure-type"></span>
+					</div>
+					<div class="col-md-2">
+						<a id="detail-favourite" class="procedure-favourite" data-title="Add_favorite" data-title-added="Remove_favorite"></a>
+					</div>
+					<div class="col-md-2">
+						<span id="detail-status" class="procedure-status"></span>
+					</div>
+					<div class="col-md-6">
+						<p class="procedure-time">Lansare<span id="detail-launch" class="procedure-launch"></span></p>
+						<p class="procedure-time">Clarificari pana la<span id="detail-clarifications" class="procedure-clarifications"></span></p>
+						<p class="procedure-time">Termen depunere<span id="detail-deadline" class="procedure-deadline"></span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="clearfix"></div>
+    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">
+      <div class="tile-title">
+        <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>
+        <br />
+      </div>
+      <div class="tile-body">
+        <input type="file" name="doc" id="js-clarification-file" />
+        <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit" />
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="js-offer-container col-md-6 col-xs-12">
+      <div class="tile-title">
+        <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>
+        <br />
+      </div>
+      <div class="tile-body">
+        <input type="file" name="offer_doc" id="js-offer-file" />
+        <input type="text" name="offer_price" class="js-offer-input" data-field="Price" placeholder="Pret" /><br /><br />
+        <input type="text" name="offer_deadline" class="js-offer-input" data-field="Deadline" placeholder="Delivery_deadline" /><br /><br />
+        <input type="button" class="btn btn-success btn-cons js-offer-start-upload" value="Submit" />
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+	</div>
+</div>
+
+			<div class="tile m-b-10 data-container" id="procedure-form-container" style="display:none">
+			<ul class="nav nav-tabs" role="tablist">
+				<li role="presentation" class="active"><a id="form-1-link" href="#form-1" class="wizard-form-step" aria-controls="form-1" role="tab" data-step="1">Definirea necesitatii</a></li>
+				<li role="presentation"><a id="form-2-link" href="#form-2" class="wizard-form-step disabled" aria-controls="form-2" role="tab" data-step="2">Referat de necesitate</a></li>
+				<li role="presentation"><a id="form-3-link" href="#form-3" class="wizard-form-step disabled" aria-controls="form-3" role="tab" data-step="3">Nota de fundamentare</a></li>
+				<li role="presentation"><a id="form-4-link" href="#form-4" class="wizard-form-step disabled" aria-controls="form-4" role="tab" data-step="4">Fisa de date</a></li>
+				<li role="presentation"><a id="form-5-link" href="#form-5" class="wizard-form-step disabled" aria-controls="form-5" role="tab" data-step="5">CS</a></li>
+				<li role="presentation"><a id="form-6-link" href="#form-6" class="wizard-form-step disabled" aria-controls="form-6" role="tab" data-step="6">Lansare procedura</a></li>
+			</ul>
+
+			<!-- Tab panes -->
+			<div class="tab-content">
+
+				<div role="tabpanel" class="tab-pane active" id="form-1">
+					<div id="Form1" onsubmit="event.preventDefault();">
+						<input type="hidden" id="brk" value='<%=User.ID_Broker%>'/>
+						<input type="hidden" name="ID" id="procedure-ID" />
+						<input type="hidden" name="SubmitTime" id="procedure-SubmitTime" />
+
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-Name" control-label="">Nume necesitate</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormProcedureName" id="Form1ProcedureName" onclick="" type="text" class="form-control required input-sm max-length"/>
+									<span id="Form1ProcedureNameError" style="display:none" class="error">Campul este obligatoriu.</span>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-Description">Descriere necesitate</label>
+							</div>
+							<div class="col-md-6">
+								<div class="widget-col">
+									<textarea name="FormProcedureDescription" id="From1ProcedureDescription" onclick="" type="text" class="form-control input-sm required" ></textarea>
+									<span id="From1ProcedureDescriptionError" style="display:none" class="error">Campul este obligatoriu.</span>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-Location">Locatie</label>
+							</div>
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input name="FormProcedureLocation" id="Form1ProcedureLocation" onclick="" type="text" class="form-control input-sm required" value="" />
+									<span id="Form1ProcedureLocationError" style="display:none" class="error">Campul este obligatoriu.</span>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-Legislation">Legislatie</label>
+							</div>
+							<div class="col-md-6">
+								<div class="widget-col">
+									<select name="FormProcedureLegislation" id="Form1ProcedureLegislation" type="text" class="form-control input-sm required">
+
+										<option value="Companii Private">Companii Private</option>
+
+										<option value="OUG 34/2006 privind Contracte Achizitie">OUG 34/2006 privind Contracte Achizitie</option>
+
+										<option value="Ordin 1120/2013 privind accesarea de fonduri europene">Ordin 1120/2013 privind accesarea de fonduri europene</option>
+
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-Duration">Durata contract</label>
+							</div>
+							<div class="col-md-3">
+								<div class="widget-col">
+									<input name="FormProcedureDuration" id="Form1ProcedureDuration" type="text" class="form-control input-sm required numeric" data-a-sep="." data-a-dec="," data-m-dec="0" data-l-zero="deny" />
+									<span id="Form1ProcedureDurationError" style="display:none"class="error">Campul este obligatoriu.</span>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="widget-col">
+									<span class="muted">luni</span>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-TotalValue">Valoare totala</label>
+							</div>
+							<div class="col-md-3">
+								<div class="widget-col">
+									<input name="FormProcedureTotalValue" id="Form1ProcedureTotalValue" type="text" class="form-control input-sm required numeric" data-a-sep="." data-a-dec="," data-m-dec="0" data-l-zero="deny" />
+									<span id="Form1ProcedureTotalValueError" style="display:none" class="error">Campul este obligatoriu.</span>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="widget-col">
+									<span class="muted">LEI</span>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-ID_ContractType">Tip contract</label>
+							</div>
+							<div class="col-md-6">
+								<div class="controls">
+									<select name="FormProcedureID_ContractType" id="Form1ProcedureID_ContractType" class="form-control required input-sm">
+									  <option value="1">Furnizare</option>
+									  <option value="2">Lucrari</option>
+									  <option value="3">Servicii</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-ID_Procedure">Tip procedura</label>
+							</div>
+							<div class="col-md-6">
+								<div class="controls">
+									<select name="FormProcedureID_ProcedureType" id="Form1ProcedureID_ProcedureType" class="form-control input-sm required">
+
+										<option value="1" id="procedure-type-option-1">ACHIZITIE DIRECTA</option>
+
+										<option value="2" id="procedure-type-option-2">CERERE OFERTA</option>
+
+										<option value="3" id="procedure-type-option-3">LICITATIE DESCHISA</option>
+
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-ID_ProcedureCriterion">Criteriu</label>
+							</div>
+							<div class="col-md-6">
+								<div class="controls">
+									<select name="FormProcedureID_ProcedureCriterion" id="Form1ProcedureID_ProcedureCriterion" class="form-control input-sm required">
+									  <option value="1">Economic</option>
+									  <option value="2">Tehnic</option>
+									  <option value="3">Tehnico-economic</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="procedure-cpv">Clasificare</label>
+							</div>
+              <div class="col-md-6">
+                <div class="controls">
+                <select multiple id="select" style="width:100%"> </select>
+                </div>
+							</div>
+						</div>
+						<a id="toggle-optional-fields">Afiseaza campuri optionale</a>
+						<div id="optional-fields-holder" style="display:block">
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-TotalValue">Formulare</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureForms" id="Form1ProcedureForms" type="text" class="form-control input-sm" rows="4">(1) Formular 2 - Declaratie privind neincadrarea in situatiile prevazute la art. 180 din OUG nr. 34/2006 cu modificarile si completarile ulterioare Încadrarea în situatia prevazuta la art. 180 din Ordonanta de Urgenta nr. 34/2006 atrage excluderea ofertantului din procedura aplicata pentru atribuirea contractului de achizitie publica
+(2) Formular 3 - Declaratie privind neincadrarea in situatiile prevazute la art. 181 din OUG nr. 34/2006 cu modificarile si completarile ulterioare  În situatia în care din documentele solicitate reiese ca ofertantul se afla într-una din situatiile prevazute de art. 181 din OUG 34/2006, acesta va fi exclus de la procedura pentru atribuirea contractului de achizitie publica.
+(3) Certificat de atestare fiscala (bugetul consolidat general) din care sa reiasa ca ofertantul/candidatul nu are datorii scadente la nivelul lunii anterioare celei in care este prevazut termenul limita de depunere a ofertelor/candidaturilor  (4) Certificat de taxe si impozite locale (bugetele locale) di care sa reiasa ca ofertantul/candidatul nu are datorii scadente la nivelul lunii anterioare celei in care este prevazut termenul limita de depunere a ofertelor/candidaturilor
+(5) Formular 5 - Declaratie privind neincadrarea in situatiile prevazute la art. 691, se va completa de catre lider, asociat, subcontractor, sustinator tert;
+(6) Formular 6 - Certificat de participare la licitatie cu oferta independenta completat în conformitate cu Ordinul ANRMAP nr. 314/2010 privind punerea în aplicare a certificatului de participare la licitatii cu oferta independenta</textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-EconomicCapacity">Capacitate economica</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureEconomicCapacity" id="Form1ProcedureEconomicCapacity" type="text" class="form-control input-sm" rows="4"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-TechnicalCapacity">Capacitate tehnica</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureTechnicalCapacity" id="Form1ProcedureTechnicalCapacity" type="text" class="form-control input-sm" rows="4"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-ClarificationRequestsDeadline">Termen cereri clarificari</label>
+								</div>
+								<div class="col-md-3">
+									<div class="widget-col">
+										<div class="input-group">
+                      <input name="FormProcedureClarificationRequestsDeadline" type='text' id='Form1ProcedureClarificationRequestsDeadline' onclick=""; class="form-control input-sm" />
+                      <span class="input-group-addon primary">
+												<i class="fa fa-calendar"></i>
+                      </span>
+                  </div>
+              </div>
+          </div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-TendersReceiptDeadline">Termen depuneri oferte</label>
+								</div>
+								<div class="col-md-3">
+									<div class="widget-col">
+										<div class="input-group">
+                      <input name="FormProcedureTendersReceiptDeadline" id="Form1ProcedureTendersReceiptDeadline" onclick=""; type="text" class="form-control input-sm" />
+                      <span class="input-group-addon primary">
+                        <i class="fa fa-calendar"></i>
+                      </span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-TendersOpeningDate">Data deschidere oferte</label>
+								</div>
+								<div class="col-md-3">
+									<div class="widget-col">
+										<div class="input-group">
+                          <input name="FormProcedureTendersOpeningDate" id="Form1ProcedureTendersOpeningDate" onclick=""; type="text" class="form-control input-sm" />
+													<span class="input-group-addon primary">
+												<i class="fa fa-calendar"></i>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-ContestationsSubmission">Cai de atac</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureContestationsSubmission" id="Form1ProcedureContestationsSubmission" onclick="" type="text" class="form-control input-sm" rows="6">Consiliul National de Solutionare a Contestatiilor - Adresa postala:  Str. Stavropoleos, nr. 6, sector 3, Bucuresti , Localitatea:  Bucuresti, Cod postal:  030084, Romania, Tel. +40 213104641, Email: office@cnsc.ro, Fax: +40 213104642 / +40 218900745, Adresa internet (URL): http://www.cnsc.ro</textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-OtherInformation">Alte informatii</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureOtherInformation" id="Form1ProcedureOtherInformation" type="text" class="form-control input-sm" rows="8"></textarea>
+									</div>
+								</div>
+							</div>
+							<div class="row form-row">
+								<div class="col-md-3">
+									<label for="procedure-Necessity">Argumentarea necesitatii</label>
+								</div>
+								<div class="col-md-6">
+									<div class="widget-col">
+										<textarea name="FormProcedureNecessity" id="Form1ProcedureNecessity" type="text" class="form-control input-sm" rows="8"></textarea>
+									</div>
+								</div>
+							</div>
+				</div>
+        <div class="row form-row">
+          <div class="col-md-6 col-md-offset-3">
+             <button class="btn btn-primary" onclick="DownloadForm();">Download</button> <button class="btn btn-primary" onclick="NextTab();">Next</button> 
+          </div>
+
+        </div>
+        </div>
+
+				</div>
+				<div role="tabpanel" class="tab-pane" id="form-2">
+					<div class="my-form" id="procedure-form-2"  data-step="2">
+						<input type="hidden" name="ID_Form" class="procedure-form-id" />
+            <div class="form-content" id="form-2-content">
+            </div>
+          </input>
+        </div>
+        <div class="row form-row">
+          <div class="col-md-6 col-md-offset-3">
+             <button class="btn btn-primary" onclick="DownloadForm(2);">Download</button> <button class="btn btn-primary" onclick="NextTab();">Next</button>
+          </div>
+        </div>
+        </div>
+
+
+
+            <div role="tabpanel" class="tab-pane" id="form-3">
+    					<div class="my-form" id="procedure-form-3"  data-step="3">
+    						<input type="hidden" name="ID_Form" class="procedure-form-id" />
+                <div class="form-content" id="form-3-content">
+                </div>
+              </input>
+            </div>
+            <div class="row form-row">
+              <div class="col-md-6 col-md-offset-3">
+                 <button class="btn btn-primary" onclick="DownloadForm(3);">Download</button> <button class="btn btn-primary" onclick="NextTab();">Next</button>
+              </div>
+            </div>
+            </div>
+
+
+
+                <div role="tabpanel" class="tab-pane" id="form-4">
+                  <div class="my-form" id="procedure-form-4"  data-step="4">
+                    <input type="hidden" name="ID_Form" class="procedure-form-id" />
+                    <div class="form-content" id="form-4-content">
+                    </div>
+                  </input>
+                </div>
+                <div class="row form-row">
+                  <div class="col-md-6 col-md-offset-3">
+                     <button class="btn btn-primary" onclick="DownloadForm(4);">Download</button> <button class="btn btn-primary" onclick="NextTab();">Next</button>
+                  </div>
+                </div>
+                </div>
+
+
+                  <div role="tabpanel" class="tab-pane" id="form-5">
+                    <div class="my-form" id="procedure-form-5"  data-step="5">
+                      <input type="hidden" name="ID_Form" class="procedure-form-id" />
+                      <div class="form-content" id="form-5-content">
+                      </div>
+                    </input>
+                  </div>
+                  <div class="row form-row">
+                    <div class="col-md-6 col-md-offset-3">
+                       <button class="btn btn-primary" onclick="DownloadForm(5);">Download</button> <button class="btn btn-primary" onclick="NextTab();">Next</button>
+                    </div>
+                  </div>
+                  </div>
+
+				<div role="tabpanel" class="tab-pane" id="form-6">
+						<div class="row procedure-details-holder procedure-item">
+							<div class="col-md-6">
+								<h5>Denumire</h5>
+								<h4 id="Form6ProcedureName" name="FormProcedureName" class="procedure-name"></h4>
+								<br/>
+								<h5>Descriere</h5>
+								<p id="Form6ProcedureDescription" class="procedure-description" name="FormProcedureDescription"></p>
+								<br/>
+                <div class="my-form" id="procedure-form-docs"  data-step="6">
+                  <h5>Documente</h5>
+                  <div id="form-detail-documents" class="procedure-documents"></div>
+                  <div id="form-detail-upload" class="row">
+                    <div class="col-md-6">
+                      <div class="controls">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+							</div>
+							<div class="col-md-5 col-md-offset-1">
+								<div class="row">
+									<div class="col-md-4">
+										<h5>Tip procedura</h5>
+									</div>
+									<div class="col-md-8">
+										<span id="Form6ProcedureID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type"></span>
+                	</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										<h5>Locatie</h5>
+									</div>
+									<div class="col-md-9">
+										<span id="Form6ProcedureLocation" name="FormProcedureLocation" class="procedure-location"></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<h5>Orar</h5>
+									</div>
+									<div class="col-md-11 col-md-offset-1">
+										<p class="procedure-time">Lansare<span id="form-detail-launch" class="procedure-launch">~WHEN</span></p>
+										<p class="procedure-time">Clarificari pana la<span id="Form6ProcedureClarificationRequestsDeadline" name='FormProcedureClarificationRequestsDeadline' class="procedure-clarifications"></span></p>
+										<p class="procedure-time">Termen depunere<span id="Form6ProcedureTendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline"></span></p>
+										<p class="procedure-time">Deschidere oferte<span id="Form6ProcedureTendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline"></span></p>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12">
+										<h5>Coduri CPV</h5>
+										<span id="form-detail-cpvs"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+          <div class="my-form" id="procedure-form-6"  data-step="6">
+            <input type="hidden" name="ID_Form" class="procedure-form-id" />
+						<div class="row form-row">
+							<div class="col-md-6 col-md-offset-3">
+								<button class="btn btn-success btn-cons form-submit"  name="submit" value="save" data-step="6">Lanseaza procedura</button>
+							</div>
+						</div>
+            <form id="first" action="/api/upload/file" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+              Select an image to upload:
+              <input type="file" name="image">
+              <input type="submit" value="Upload Image">
+            </form>
+            <form id="second"action="/api/upload/file" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+              Select an image to upload:
+              <input type="file" name="image">
+              <input type="submit" value="Upload Image">
+            </form>
+            <form id="third" action="/api/upload/file" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
+              Select an image to upload:
+              <input type="file" name="image">
+              <input type="submit" value="Upload Image">
+            </form>
+					</div>
+
+				</div>
+				<div class="tab-footer">
+					<div class="row" id="generated-files-container">
+						<div class="col-md-2">
+							Fisiere generate:
+						</div>
+						<div class="col-md-10">
+							<div class="text-center padding-20 loader"><img src="/img/loader-white.gif"></div>
+							<div id="procedure-documents-download"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+</div>
+			<div class="tile m-b-10 data-container" id="catalog-produse" style="display:none">
+				<div class="tile white m-b-10">
+					<form id="FormCatalogProduse" class="login-form">
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Name" control-label="">Nume produs</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogName" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Code" control-label="">Code</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogCode" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Type" control-label="">Type</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogType" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-BeneficiaryType" control-label="">BeneficiaryType</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogBeneficiaryType" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-CPV" control-label="">CPV</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogCPV" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Description" control-label="">Description</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogDescription" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-DescriptionUpload" control-label="">DescriptionUpload</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogDescriptionUpload" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-DeliveryDetails" control-label="">DeliveryDetails</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogDeliveryDetails" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Warranty" control-label="">Warranty</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogWarranty" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-OfferCondition" control-label="">OfferCondition</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogOfferCondition" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-OfferDeadline" control-label="">OfferDeadline</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogOfferDeadline" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-StartDay" control-label="">StartDay</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogStartDay" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<div class="row form-row">
+							<div class="col-md-3">
+								<label for="Catalog-Budget" control-label="">Budget</label>
+							</div>
+
+							<div class="col-md-6">
+								<div class="widget-col">
+									<input value="" name="FormCatalogBudget" type="text" class="form-control required input-sm max-length"/>
+								</div>
+							</div>
+						</div>
+						<button id="CatalogSubmit" class="btn btn-primary btn-cons">Lanseaza Produs</button>
+					</form>
+				</div>
+
+				<div class="tile white m-b-10">
+					<div class="tile-title">
+						<div class="controller">
+							<a href="" class="collapse pull-right m-l-15">&nbsp;</a>
+						</div>
+						<h3 class="no-margin m-b-10">Product_catalog</h3>
+					</div>
+					<div class="tile-body">
+						<div class="own-products row">
+							<div class="col-md-6">
+								You Have <a class="own-products"> active_products_in_the_catalog</a><br />
+								<a class="new-product-requests">new_product_requests</a>
+							</div>
+							<div class="col-md-6">
+								<a class="add-product">Add_product</a>
+							</div>
+						</div>
+						<div class="all-products">
+							<a class="all-products">active_products_in_the_catalog</a>
+							<a class="favorite-products">favorite_products</a>
+						</div>
+					</div>
+				</div>
+			<div class="clearfix"></div>
+</div>
+	</div>
+</div>
+					</div>
+				</div>
+			</div>
+		</div>
+			<input id="UserLanguage" type="hidden" value="<% if (typeof User.Language !== 'undefined') {%><%=User.Language%><%}%>"></input>
+			<div id="dialog" class="text-center" style="display: none !important"></div>
+
+<script>
+	var UserLanguage = $('#UserLanguage').val();
+</script>
+
+			<script>
+// $(document).ready(function(){
+//     $(".nav-tabs a").click(function(){
+//         $(this).tab('show');
+//     });
+// });
+
+$(function(){
+	$('#alerts-container').slimScroll({
+		start: 'bottom',
+    height: '90px'
+	});
+});
+
+$(function(){
+	$('#my-procedures-scroller').slimScroll({
+		height: '250px',
+		start: 'bottom'
+	});
+});
+
+
+</script>
+
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+    var socket = io.connect('http://localhost:5000');
+    socket.on('socketToMe', function (data) {
+    console.log('WS Event: ' +data+' !');
+	if(data == "NewProcedure")
+		{
+			getProcedures();
+		}
+	if(data == "updateAlerts")
+		{
+		getNotifications();
+		}
+	if(data == "updateChat")
+		{
+			getChatHistory();
+		}
+	});
+    </script>
+
+	<script type="text/javascript">
+  	//Datepicker
+		$(function () {
+			$('#filter-start').datetimepicker({format: 'DD/MM/YYYY'});
+			$('#filter-end').datetimepicker({format: 'DD/MM/YYYY'});
+			$('#Form1ProcedureTendersOpeningDate').datetimepicker();
+			$('#Form1ProcedureTendersReceiptDeadline').datetimepicker();
+			$('#Form1ProcedureClarificationRequestsDeadline').datetimepicker();
+		});
+
+
+
+	</script>
+
+	<!--<script>-->
+		<!--function processF() {-->
+			<!--$('form').submit(function(event) {-->
+
+				<!--// get the form data-->
+				<!--// there are many ways to get this data using jQuery (you can use the class or id also)-->
+				<!--var formData = {-->
+					<!--'name'              : $('input[name=name]').val(),-->
+					<!--'email'             : $('input[name=email]').val(),-->
+					<!--'superheroAlias'    : $('input[name=superheroAlias]').val()-->
+				<!--};-->
+
+				<!--// process the form-->
+				<!--$.ajax({-->
+					<!--type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)-->
+					<!--url         : 'process.php', // the url where we want to POST-->
+					<!--data        : formData, // our data object-->
+					<!--dataType    : 'json', // what type of data do we expect back from the server-->
+					<!--encode          : true-->
+				<!--})-->
+				<!--// using the done promise callback-->
+						<!--.done(function(data) {-->
+
+							<!--// log data to the console so we can see-->
+							<!--console.log(data);-->
+
+							<!--// here we will handle errors and validation messages-->
+						<!--});-->
+
+				<!--// stop the form from submitting the normal way and refreshing the page-->
+				<!--event.preventDefault();-->
+			<!--});-->
+		<!--}-->
+	<!--</script>-->
+
+<script>
+	$(document).ready(function() {
+		$("#CatalogSubmit").click(function (e) {
+			e.preventDefault();
+			$.ajax({
+				type: 'POST',
+				async: true,
+				url: '/api/catalog/post',
+				data: $('#FormCatalogProduse').serialize(),
+				success: function (response) {
+					console.log(response);
+				},
+				error: function () {
+					console.log("Signup was unsuccessful");
+				}
+			});
+		});
+	});
+
+
+  function ValidateUpload(id)
+  {
+
+   ele = document.getElementById(id);
+   if( ele.files.length <= 0) {alert("Please select a file"); $("#upload-file-info").html("Select an file to upload:");}
+   else
+     {
+          var name = ele.files[0].name;
+          var size = parseFloat(ele.files[0].size/1024/1024).toFixed(2);
+          var extension = ele.files[0].name.slice((ele.files[0].name.lastIndexOf(".") - 1 >>> 0) + 2);
+
+          if( size > 4){
+             alert("Error the file is bigger than 4MB! "+ size +"MB.");
+             ele.form.reset();
+             return false;
+           }
+
+          else if (  extension !== "doc" && extension !== "docx"){
+               alert("Error the file does not appear to be a .doc or .docx file!");
+               ele.form.reset();
+               return false;
+          }
+
+          else {
+            $("#upload-file-form").submit();
+            $("#upload-file-info").html("Select an file to upload:");
+            alert("sent");
+          }
+    };
+  };
+  // function toggleDiv(id)
+  // {
+  //   $('#'+id).toggleClass('tile m-b-10 collapsed');
+  //   $('#'+id).toggleClass('tile m-b-10');
+  // }
+
+  // <form id="upload-file-form" action="./api/upload/file" method="POST" enctype="multipart/form-data">
+  // <label  class="btn btn-info">
+  //       <input id="upload-file-form1" style="display: none" type="file" onchange='$("#upload-file-info").html($(this).val())'>
+  //       <input type="submit" value="Upload Image">
+  //   <p id="upload-file-info">
+  //   Select an file to upload:
+  // </p>
+  // </label>
+  //
+  // </form>
+
+
+</script>
+    </body>
+
+</html>
