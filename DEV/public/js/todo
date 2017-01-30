@@ -1,0 +1,17 @@
+- Edit Proc la next
+-  MODIFICAT filtre prin CacheController
+-  pus pe direct notification si chat
+- fixed slimScroll
+- servertime pe frontpage
+- fix upload bugs
+- css
+- add error handling pentru sesiune si cache ready
+- register
+- ANAP sa vada toate procedurile
+-edit CPV string carnat
+
+
+data 2 = timp pana cand are voie la offer
+data 3 = appen button de desemneaza
+
+good to have, generate details cu cache

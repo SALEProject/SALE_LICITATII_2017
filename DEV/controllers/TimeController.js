@@ -36,6 +36,13 @@ var WSrequest = http.request(WSoptions, function(WSres)
       WSres.on('end', function()
         {
 
+          if( ServerCache.testJSON(data) == false)
+          {
+            console.log(data);
+            res.sendStatus(500);
+            return false;
+          }
+
           data = JSON.parse(data);
 
 

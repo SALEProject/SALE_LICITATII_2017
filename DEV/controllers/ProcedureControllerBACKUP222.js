@@ -681,13 +681,7 @@ exports.deleteProcedure = function(req, res, next)
     {
 
 
-    if( req.session.User == "undefined" || req.session.User == "" || req.session.User.ID_Client == "undefined" || req.session.User.ID_Client == "" )
-    {
-      console.log("Session Not Found");
-      res.redirect("/logout");
-      return false;
-    }
-
+    var UserID = 161;
     var ProcedureID = req.body.id;
 
     // test documentzzzzzz
@@ -753,9 +747,7 @@ exports.deleteProcedure = function(req, res, next)
 
             else
               {
-                var MesajTabelGol = '<p>Nu sunt documente incarcate.</p>';
-                var TabelBeneficiar = '';
-                var TabelFurnizor = '';
+                //ALL OK
                 var Result = '';
                 var Oferta ='<h6> Oferte </h6>'+
                             '<table class="table table-hover table-condensed">'+
@@ -765,108 +757,21 @@ exports.deleteProcedure = function(req, res, next)
                             '<th style="max-width: 250px">Valoare</th>'+
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
-                var EmptyOferta = Oferta;
-                var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
-                            '<table class="table table-hover table-condensed">'+
-                            '<tr>'+
-                            '<th style="max-width: 250px">Nume</th>'+
-                            '<th style="max-width: 250px">Data</th>'+
-                            '<th style="max-width: 250px">Autor</th>'+
-                            '<th style="max-width: 250px">Link</th>'+
-                            '</tr>';
-                var EmptyCerereClarificare = CerereClarificare;
-                var Clarificari ='<h6> Clarificari </h6>'+
-                            '<table class="table table-hover table-condensed">'+
-                            '<tr>'+
-                            '<th style="max-width: 250px">Nume</th>'+
-                            '<th style="max-width: 250px">Data</th>'+
-                            '<th style="max-width: 250px">Autor</th>'+
-                            '<th style="max-width: 250px">Link</th>'+
-                            '</tr>';
-                var EmptyClarificari = Clarificari;
-                var Documente ='<h6> Documente </h6>'+
-                            '<table class="table table-hover table-condensed">'+
-                            '<tr>'+
-                            '<th style="max-width: 250px">Nume</th>'+
-                            '<th style="max-width: 250px">Data</th>'+
-                            '<th style="max-width: 250px">Autor</th>'+
-                            '<th style="max-width: 250px">Link</th>'+
-                            '</tr>';
-                var EmptyDocumente  = Documente;
-
-                for (var i = 0; i < data.Result.Rows.length; i++)
-                {
-                  switch (data.Result.Rows[i].Name) {
-                    case "Oferta":
-                    Oferta += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-                      break;
-                    case "Referat de necesitate":
-                    Documente += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-                      break;
-                    case "Nota de fundamentare":
-                    Documente += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-                      break;
-                    case "Fisa de date":
-                    Documente += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-                      break;
-                    case "Cerere de clarificare":
-                    CerereClarificare += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-                      break;
-
-                      case "Clarificare":
-                      Clarificari += '<tr>'+
-                                '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                                '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                                '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                                '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                                '</tr>';
-                        break;
-                    default:
-                    Documente += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
-
+                for (var i = 0; i < data.Result.Rows.length; i++) {
+                  if(data.Result.Rows[i].ID_Procedure == ProcedureID && data.Result.Rows[i].ID_CLient == UserID){
+                      //Get offers
+                      if( data.Result.Rows[i].Name == "Oferta" && Number.isInteger(data.Result.Rows[i].Value))
+                      {
+                        Oferta += '<tr>'+
+                                  '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                                  '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                                  '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
+                                  '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                                  '</tr>';
+                      }
                   }
                 }
-
-                //(question)?(result if true):(result is false)
-                (Oferta === EmptyOferta) ? Oferta = '<h6> Oferte </h6>'+MesajTabelGol : Oferta += '</table>';
-                (CerereClarificare === EmptyCerereClarificare) ? CerereClarificare = '<h6> Cerere de clarificare </h6>'+MesajTabelGol : CerereClarificare += '</table>';
-                (Clarificari === EmptyClarificari) ? Clarificari = '<h6> Clarificari </h6>'+MesajTabelGol : Clarificari += '</table>';
-                (Documente=== EmptyDocumente) ? Documente = '<h6> Documente </h6>'+MesajTabelGol : Documente += '</table>';
-                // Beneficiar Ordine = 1 Oferta 2 Cereri clarificari 3 Doc urcate (aparent fara Clarificari (cele urcare de el))
-                TabelBeneficiar += Oferta+CerereClarificare+Clarificari+Documente;
-                // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
-                // TabelFurnizor += Documente+Oferta+Clarificari;
-
+                Oferta += '</table>';
                 var Procedure = ServerCache.getProcedurebyID(ProcedureID);
                 if(Procedure !== null || Procedure !== "" || Procedure !== "undefined")
                 {
@@ -940,7 +845,7 @@ exports.deleteProcedure = function(req, res, next)
                                             '   <br>'+
                                             '   </div>'+
                                             '   <div class="tile-body">'+
-                                            TabelBeneficiar+
+                                            Oferta+
                                             '   </div>'+
                                             '   <div class="clearfix"></div>'+
                                             '   </div>'+
@@ -950,8 +855,6 @@ exports.deleteProcedure = function(req, res, next)
                                           }
                       else
                       {
-                        // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
-                        TabelFurnizor += Documente+Oferta+Clarificari;
                         Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
                         '    <div class="tile-title">'+
                         '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
@@ -1019,7 +922,6 @@ exports.deleteProcedure = function(req, res, next)
                         '   <br>'+
                         '   </div>'+
                         '   <div class="tile-body">'+
-                        TabelFurnizor+
                         '   </div>'+
                         '   <div class="clearfix"></div>'+
                         '   </div>'+

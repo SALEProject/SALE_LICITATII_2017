@@ -67,6 +67,36 @@
 			<a href="/"><img src="/img/logo.png" class="logo" alt=""  data-src="/img/logo.png" width="60" height="60"/></a>
  			<div id="time-container"><span id="servertime" class="server-time" class=""></span></div>
 		</div>
+
+    <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+    <div class="input-group">
+    <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span> <input class="form-control" style="max-width: 110px;" placeholder="Valoare in Lei" type="text" name="OfferValue">    <input class="btn btn-primary" type="submit" value="Upload" />
+    <label class="btn btn-primary" for="my-file-selector">
+    <input id="my-file-selector" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+    Button Text Here
+   </label>
+    <span  id="upload-file-info" ></span>
+      </div>
+      </form> -->
+
+    <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+
+        <input id="my-file-selector" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+        Button Text Here
+
+    <span class='label label-info' id="upload-file-info"></span> <i class="glyphicon glyphicon-usd"></i> <input class="form-control" style="max-width: 110px;" placeholder="Valoare in Lei" type="text" name="OfferValue">    <input class="btn btn-primary" type="submit" value="Upload" />
+ -->
+
+    <!-- <label class="btn btn-primary" for="my-file-selector">
+    <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+      <input id="my-file-selector" type="file" accept=".pdf" name="file" required style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+      Select a file
+        <input type="hidden" name="ProcedureID" value="6202">
+        <input type="hidden" name="DocName" value="Oferta">
+        <input type="text" name="OfferValue">
+        <input type="submit" value="Upload" />
+    </form>
+    </label> -->
     <!-- <form id="UpForm" action="/api/upload/file" method="POST" enctype="multipart/form-data" accept-charset="UTF-8">
       Select an image to upload:
       <input id="UpInput" type="file" name="image">
@@ -730,10 +760,10 @@
 						<div class="row procedure-details-holder procedure-item">
 							<div class="col-md-6">
 								<h5>Denumire</h5>
-								<h4 id="Form6ProcedureName" name="FormProcedureName" class="procedure-name"></h4>
+								<h4 rel="@Procedure.Name" id="Form6ProcedureName" name="FormProcedureName" class="procedure-name"></h4>
 								<br/>
 								<h5>Descriere</h5>
-								<p id="Form6ProcedureDescription" class="procedure-description" name="FormProcedureDescription"></p>
+								<p rel="@Procedure.Description" id="Form6ProcedureDescription" class="procedure-description" name="FormProcedureDescription"></p>
 								<br/>
                 <div class="my-form" id="procedure-form-docs"  data-step="6">
                   <h5>Documente</h5>
@@ -741,7 +771,6 @@
                   <div id="form-detail-upload" class="row">
                     <div class="col-md-6">
                       <div class="controls">
-
                       </div>
                     </div>
                   </div>
@@ -753,7 +782,7 @@
 										<h5>Tip procedura</h5>
 									</div>
 									<div class="col-md-8">
-										<span id="Form6ProcedureID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type"></span>
+										<span rel="@Procedure.ID_ProcedureType" id="Form6ProcedureID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type"></span>
                 	</div>
 								</div>
 								<div class="row">
@@ -761,7 +790,7 @@
 										<h5>Locatie</h5>
 									</div>
 									<div class="col-md-9">
-										<span id="Form6ProcedureLocation" name="FormProcedureLocation" class="procedure-location"></span>
+										<span rel="@Procedure.Location" id="Form6ProcedureLocation" name="FormProcedureLocation" class="procedure-location"></span>
 									</div>
 								</div>
 								<div class="row">
@@ -769,16 +798,16 @@
 										<h5>Orar</h5>
 									</div>
 									<div class="col-md-11 col-md-offset-1">
-										<p class="procedure-time">Lansare<span id="form-detail-launch" class="procedure-launch">~WHEN</span></p>
-										<p class="procedure-time">Clarificari pana la<span id="Form6ProcedureClarificationRequestsDeadline" name='FormProcedureClarificationRequestsDeadline' class="procedure-clarifications"></span></p>
-										<p class="procedure-time">Termen depunere<span id="Form6ProcedureTendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline"></span></p>
-										<p class="procedure-time">Deschidere oferte<span id="Form6ProcedureTendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline"></span></p>
+										<!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->
+										<p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" id="Form6ProcedureClarificationRequestsDeadline" name='FormProcedureClarificationRequestsDeadline' class="procedure-clarifications"></span></p>
+										<p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" id="Form6ProcedureTendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline"></span></p>
+										<p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" id="Form6ProcedureTendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline"></span></p>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-md-12">
 										<h5>Coduri CPV</h5>
-										<span id="form-detail-cpvs"></span>
+										<span rel="@Procedure.ClassificationIDs" id="form-detail-cpvs"></span>
 									</div>
 								</div>
 							</div>
@@ -791,11 +820,40 @@
 								<button class="btn btn-primary" name="navigationButtonPrev">Pasul Precedent</button> <button class="btn btn-success btn-cons form-submit"  name="submit" value="save" data-step="6">Lanseaza procedura</button>
 							</div>
 						</div>
-            <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+            <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+            <div class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span> <input class="form-control" style="max-width: 110px;" placeholder="Valoare in Lei" type="text" name="OfferValue">    <input class="btn btn-primary" type="submit" value="Upload" />
+            <label class="btn btn-primary" for="my-file-selector">
+              <input type="hidden" name="ProcedureID" value="6202">
+              <input type="hidden" name="DocName" value="Oferta">
+            <input id="my-file-selector" type="file" style="display:none;" onchange="$('#upload-file-info').html($(this).val());">
+            Button Text Here
+           </label>
+            <span  id="upload-file-info" ></span>
+              </div>
+              </form> -->
+
+              <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+                  <label>Select a file:</label><br>
+                    <input type="file" accept=".pdf" name="file" required />
+                    <input type="hidden" name="ProcedureID" value="6202">
+                    <input type="hidden" name="DocName" value="Oferta">
+                  <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span> <input class="form-control" style="max-width: 110px;" type="text" name="OfferValue">
+                    <input type="submit" value="Upload" />
+                    </span>
+                  </div>
+              </form>
+
+            <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
                 <label>Select a file:</label><br>
-                <input type="file" accept=".doc" name="file" required />
+                <input type="file" accept=".pdf" name="file" required />
+                <input type="hidden" name="ProcedureID" value="6202">
+                <input type="hidden" name="DocName" value="Oferta">
+                <input type="text" name="OfferValue">
                 <input type="submit" value="Upload" />
-            </form>
+            </form> -->
+
 					</div>
 				</div>
 			</div>
@@ -1037,11 +1095,11 @@ $(function(){
 	<script type="text/javascript">
   	//Datepicker
 		$(function () {
-			$('#filter-start').datetimepicker({format: 'DD/MM/YYYY'});
-			$('#filter-end').datetimepicker({format: 'DD/MM/YYYY'});
-			$('#Form1ProcedureTendersOpeningDate').datetimepicker();
-			$('#Form1ProcedureTendersReceiptDeadline').datetimepicker();
-			$('#Form1ProcedureClarificationRequestsDeadline').datetimepicker();
+			$('#filter-start').datetimepicker({format: 'YYYY-MM-DD'});
+			$('#filter-end').datetimepicker({format: 'YYYY-MM-DD'});
+			$('#Form1ProcedureTendersOpeningDate').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+			$('#Form1ProcedureTendersReceiptDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+			$('#Form1ProcedureClarificationRequestsDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
 		});
 
 

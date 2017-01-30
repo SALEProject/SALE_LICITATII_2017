@@ -1,159 +1,31 @@
-// function DownloadForm(id)
-// {
-//   // onclick="DownloadForm(form-2);
-//   console.log("#"+id)
-//   var code = $("#"+id).html();
-//   code = code.replace(/<\/?span[^>]*>/g,"");
-//     code = code.replace(/<\/?textarea[^>]*>/g,"");
-//   // console.log($("#"+id).html());
+function DownloadDocument(id,Pid)
+{
 //   $.ajax({
-//       url: '/api/download/post',
-//       method: 'post',
-//       async: true,
-//       data: JSON.stringify({
-//           Contents: code,
-//       }),
-//       contentType: "application/json",
-//       success: function(reply) {console.log(reply)}
-//   })
-// }
-
-// $(window).load(function() {
-// $(".wizard-form-step").click(function(e) {
-//   e.preventDefault();
-//   if($(this).hasClass('disabled')) {
-//     return false;
-//   }
-//   else {
-//     console.log(this);
-//   }
-// });
-// });
-
-
-// // NAVIGATE CLICK TABS
-//
-// $(function () {
-//     $('.nav-tabs a').click(function (e) {
-//         e.preventDefault();
-//         if($(this).hasClass('disabled')) {
-//               return false;
-//         }
-//         else
-//         {
-//           var step = $(this).attr('data-step');
-//           // if(step != 1) $("#form-1-link").addClass('disabled');
-//           $('a[href="' + $(this).attr('href') + '"]').tab('show');
-//           console.log($(this).attr('data-step'));
-//           if( step > 1 && step < 6)
-//           {
-//             console.log("would generate");
-//             $.ajax({
-//                 url: "/api/forms/get",
-//                 method: 'post',
-//                 async: true,
-//                 data: JSON.stringify({id: 4192,step: step}),
-//                 contentType: "application/json",
-//                 success: function(data)
-//                                         {
-//                                           $("#form-"+step+"-content").empty();
-//                                           $("#form-"+step+"-content").append(data);
-//                                         }
-//             })
-//           }
-//
-//         }
-//
-//     })
-// });
-//
-// // NAVIGATE CLICK TABS
-//
-// $(function () {
-//     $('.nav-tabs a').click(function (e) {
-//         e.preventDefault();
-//         if($(this).hasClass('disabled')) {
-//               return false;
-//         }
-//         else
-//         {
-//           var step = $(this).attr('data-step');
-//           // if(step != 1) $("#form-1-link").addClass('disabled');
-//           $('a[href="' + $(this).attr('href') + '"]').tab('show');
-//           console.log($(this).attr('data-step'));
-//           if( step > 1 && step < 6)
-//           {
-//             console.log("would generate");
-//             $.ajax({
-//                 url: "/api/forms/get",
-//                 method: 'post',
-//                 async: true,
-//                 data: JSON.stringify({id: 4192,step: step}),
-//                 contentType: "application/json",
-//                 success: function(data)
-//                                         {
-//                                           $("#form-"+step+"-content").empty();
-//                                           $("#form-"+step+"-content").append(data);
-//                                         }
-//             })
-//           }
-//
-//         }
-//
-//     })
-// });
-//
-
-
-
-// function NextTab()
-// {
-//   $("#form-2-link").removeClass('disabled');
-//   $("#form-3-link").removeClass('disabled');
-//   $("#form-4-link").removeClass('disabled');
-//   $("#form-5-link").removeClass('disabled');
-//   $("#form-6-link").removeClass('disabled');
-//    var step = $('.nav-tabs > .active').next('li').find('a').attr('href');
-//    $('.nav-tabs > .active').next('li').find('a').trigger('click');
-// }
-//
-// function PrevTab()
-// {
-//     $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-// }
-
-
-// function NT(id)
-// {
-//   // $('.nav-tabs a:first').tab('show')
-//   // $('.nav-pills > li.active')
-//   // $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-//   var step = $('.nav-tabs > .active').find('a').attr('data-step');
-  // if( step > 1 && step < 6)
-  // {
-  //   console.log("generating");
-  //   $("#form-2-link").removeClass('disabled');
-  //   $("#form-3-link").removeClass('disabled');
-  //   $("#form-4-link").removeClass('disabled');
-  //   $("#form-5-link").removeClass('disabled');
-  //   $("#form-6-link").removeClass('disabled');
-  //
-  //   $.ajax({
-  //       url: "/api/forms/get",
-  //       method: 'post',
-  //       async: true,
-  //       data: JSON.stringify({id: 4192,step: step}),
-  //       contentType: "application/json",
-  //       success: function(data)
-  //                               {
-  //                                 $('.nav-tabs > .active').next('li').find('a').trigger('click');
-                                  // $("#form-"+step+"-content").empty();
-                                  // $("#form-"+step+"-content").append(data);
-  //                               }
-  //   })
-  // }
-//
-// }
+//     url: "/api/download/downloadfile",
+//     method: 'post',
+//     async: true,
+//     data: JSON.stringify({DocumentID: id,ProcedureID: Pid }),
+//     contentType: "application/json",
+//     success: function(data) {},
+// })
+    // target= _blank 
+    document.body.innerHTML += '<form id=\'DLF2\' action=\'/api/download/downloadfile\' method=\'POST\'><input type=\'hidden\' name=\'DocumentID\' value='+id+'> <input type=\'hidden\' name=\'ProcedureID\' value='+ Pid +'></form>';
+    document.getElementById("DLF2").submit();
+    document.getElementById("DLF2").remove();
+    $('#filter-start').datetimepicker({format: 'YYYY-MM-DD'});
+    $('#filter-end').datetimepicker({format: 'YYYY-MM-DD'});
+    $('#Form1ProcedureTendersOpeningDate').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+    $('#Form1ProcedureTendersReceiptDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+    $('#Form1ProcedureClarificationRequestsDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+    // $('#alerts-container').slimScroll({
+    //   start: 'bottom',
+    //   height: '90px'
+    // });
+    // $('#my-procedures-scroller').slimScroll({
+    //   height: '250px',
+    //   start: 'bottom'
+    // });
+}
 
 function NextTab(id)
 {
@@ -184,6 +56,27 @@ function NextTab(id)
                                 }
     })
   }
+
+  else if(nextStep == 6)
+        {
+          $("#procedure-form-"+nextStep).find("div[class*='text-center padding-20 loader']").show();
+          $("#form-"+nextStep+"-content").empty();
+          $('.nav-tabs > .active').next('li').find('a').tab('show');
+
+          $.ajax({
+              url: "/api/forms/get",
+              method: 'post',
+              async: true,
+              data: JSON.stringify({id: id,step: nextStep }),
+              contentType: "application/json",
+              success: function(data)
+                                      {
+                                        $("#procedure-form-"+nextStep).find("div[class*='text-center padding-20 loader']").hide();
+                                        $("#form-"+nextStep+"-content").empty();
+                                        $("#form-"+nextStep+"-content").append(data);
+                                      }
+          })
+        }
   else {
       $('.nav-tabs > .active').next('li').find('a').tab('show');
   }
@@ -466,3 +359,161 @@ $( function() {
     $( "#combobox" ).toggle();
   });
 } );
+
+
+// function DownloadForm(id)
+// {
+//   // onclick="DownloadForm(form-2);
+//   console.log("#"+id)
+//   var code = $("#"+id).html();
+//   code = code.replace(/<\/?span[^>]*>/g,"");
+//     code = code.replace(/<\/?textarea[^>]*>/g,"");
+//   // console.log($("#"+id).html());
+//   $.ajax({
+//       url: '/api/download/post',
+//       method: 'post',
+//       async: true,
+//       data: JSON.stringify({
+//           Contents: code,
+//       }),
+//       contentType: "application/json",
+//       success: function(reply) {console.log(reply)}
+//   })
+// }
+
+// $(window).load(function() {
+// $(".wizard-form-step").click(function(e) {
+//   e.preventDefault();
+//   if($(this).hasClass('disabled')) {
+//     return false;
+//   }
+//   else {
+//     console.log(this);
+//   }
+// });
+// });
+
+
+// // NAVIGATE CLICK TABS
+//
+// $(function () {
+//     $('.nav-tabs a').click(function (e) {
+//         e.preventDefault();
+//         if($(this).hasClass('disabled')) {
+//               return false;
+//         }
+//         else
+//         {
+//           var step = $(this).attr('data-step');
+//           // if(step != 1) $("#form-1-link").addClass('disabled');
+//           $('a[href="' + $(this).attr('href') + '"]').tab('show');
+//           console.log($(this).attr('data-step'));
+//           if( step > 1 && step < 6)
+//           {
+//             console.log("would generate");
+//             $.ajax({
+//                 url: "/api/forms/get",
+//                 method: 'post',
+//                 async: true,
+//                 data: JSON.stringify({id: 4192,step: step}),
+//                 contentType: "application/json",
+//                 success: function(data)
+//                                         {
+//                                           $("#form-"+step+"-content").empty();
+//                                           $("#form-"+step+"-content").append(data);
+//                                         }
+//             })
+//           }
+//
+//         }
+//
+//     })
+// });
+//
+// // NAVIGATE CLICK TABS
+//
+// $(function () {
+//     $('.nav-tabs a').click(function (e) {
+//         e.preventDefault();
+//         if($(this).hasClass('disabled')) {
+//               return false;
+//         }
+//         else
+//         {
+//           var step = $(this).attr('data-step');
+//           // if(step != 1) $("#form-1-link").addClass('disabled');
+//           $('a[href="' + $(this).attr('href') + '"]').tab('show');
+//           console.log($(this).attr('data-step'));
+//           if( step > 1 && step < 6)
+//           {
+//             console.log("would generate");
+//             $.ajax({
+//                 url: "/api/forms/get",
+//                 method: 'post',
+//                 async: true,
+//                 data: JSON.stringify({id: 4192,step: step}),
+//                 contentType: "application/json",
+//                 success: function(data)
+//                                         {
+//                                           $("#form-"+step+"-content").empty();
+//                                           $("#form-"+step+"-content").append(data);
+//                                         }
+//             })
+//           }
+//
+//         }
+//
+//     })
+// });
+//
+
+
+
+// function NextTab()
+// {
+//   $("#form-2-link").removeClass('disabled');
+//   $("#form-3-link").removeClass('disabled');
+//   $("#form-4-link").removeClass('disabled');
+//   $("#form-5-link").removeClass('disabled');
+//   $("#form-6-link").removeClass('disabled');
+//    var step = $('.nav-tabs > .active').next('li').find('a').attr('href');
+//    $('.nav-tabs > .active').next('li').find('a').trigger('click');
+// }
+//
+// function PrevTab()
+// {
+//     $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+// }
+
+
+// function NT(id)
+// {
+//   // $('.nav-tabs a:first').tab('show')
+//   // $('.nav-pills > li.active')
+//   // $('.nav-tabs > .active').prev('li').find('a').trigger('click');
+//   var step = $('.nav-tabs > .active').find('a').attr('data-step');
+  // if( step > 1 && step < 6)
+  // {
+  //   console.log("generating");
+  //   $("#form-2-link").removeClass('disabled');
+  //   $("#form-3-link").removeClass('disabled');
+  //   $("#form-4-link").removeClass('disabled');
+  //   $("#form-5-link").removeClass('disabled');
+  //   $("#form-6-link").removeClass('disabled');
+  //
+  //   $.ajax({
+  //       url: "/api/forms/get",
+  //       method: 'post',
+  //       async: true,
+  //       data: JSON.stringify({id: 4192,step: step}),
+  //       contentType: "application/json",
+  //       success: function(data)
+  //                               {
+  //                                 $('.nav-tabs > .active').next('li').find('a').trigger('click');
+                                  // $("#form-"+step+"-content").empty();
+                                  // $("#form-"+step+"-content").append(data);
+  //                               }
+  //   })
+  // }
+//
+// }

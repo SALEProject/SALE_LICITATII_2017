@@ -681,13 +681,7 @@ exports.deleteProcedure = function(req, res, next)
     {
 
 
-    if( req.session.User == "undefined" || req.session.User == "" || req.session.User.ID_Client == "undefined" || req.session.User.ID_Client == "" )
-    {
-      console.log("Session Not Found");
-      res.redirect("/logout");
-      return false;
-    }
-
+    var UserID = 161;
     var ProcedureID = req.body.id;
 
     // test documentzzzzzz
@@ -753,9 +747,7 @@ exports.deleteProcedure = function(req, res, next)
 
             else
               {
-                var MesajTabelGol = '<p>Nu sunt documente incarcate.</p>';
-                var TabelBeneficiar = '';
-                var TabelFurnizor = '';
+                var Tabel = '';
                 var Result = '';
                 var Oferta ='<h6> Oferte </h6>'+
                             '<table class="table table-hover table-condensed">'+
@@ -765,25 +757,22 @@ exports.deleteProcedure = function(req, res, next)
                             '<th style="max-width: 250px">Valoare</th>'+
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
-                var EmptyOferta = Oferta;
                 var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
                             '<table class="table table-hover table-condensed">'+
                             '<tr>'+
-                            '<th style="max-width: 250px">Nume</th>'+
                             '<th style="max-width: 250px">Data</th>'+
-                            '<th style="max-width: 250px">Autor</th>'+
+                            '<th style="max-width: 250px">Ofertant</th>'+
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
-                var EmptyCerereClarificare = CerereClarificare;
+
                 var Clarificari ='<h6> Clarificari </h6>'+
                             '<table class="table table-hover table-condensed">'+
                             '<tr>'+
-                            '<th style="max-width: 250px">Nume</th>'+
                             '<th style="max-width: 250px">Data</th>'+
-                            '<th style="max-width: 250px">Autor</th>'+
+                            '<th style="max-width: 250px">Ofertant</th>'+
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
-                var EmptyClarificari = Clarificari;
+
                 var Documente ='<h6> Documente </h6>'+
                             '<table class="table table-hover table-condensed">'+
                             '<tr>'+
@@ -792,7 +781,6 @@ exports.deleteProcedure = function(req, res, next)
                             '<th style="max-width: 250px">Autor</th>'+
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
-                var EmptyDocumente  = Documente;
 
                 for (var i = 0; i < data.Result.Rows.length; i++)
                 {
@@ -831,7 +819,6 @@ exports.deleteProcedure = function(req, res, next)
                       break;
                     case "Cerere de clarificare":
                     CerereClarificare += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
                               '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
                               '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
                               '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
@@ -840,7 +827,6 @@ exports.deleteProcedure = function(req, res, next)
 
                       case "Clarificare":
                       Clarificari += '<tr>'+
-                                '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
                                 '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
                                 '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
                                 '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
@@ -857,101 +843,15 @@ exports.deleteProcedure = function(req, res, next)
                   }
                 }
 
-                //(question)?(result if true):(result is false)
-                (Oferta === EmptyOferta) ? Oferta = '<h6> Oferte </h6>'+MesajTabelGol : Oferta += '</table>';
-                (CerereClarificare === EmptyCerereClarificare) ? CerereClarificare = '<h6> Cerere de clarificare </h6>'+MesajTabelGol : CerereClarificare += '</table>';
-                (Clarificari === EmptyClarificari) ? Clarificari = '<h6> Clarificari </h6>'+MesajTabelGol : Clarificari += '</table>';
-                (Documente=== EmptyDocumente) ? Documente = '<h6> Documente </h6>'+MesajTabelGol : Documente += '</table>';
+                Oferta += '</table>';
+                Documente += '</table>';
+                CerereClarificare += '</table>';
+                Clarificari += '</table>';
                 // Beneficiar Ordine = 1 Oferta 2 Cereri clarificari 3 Doc urcate (aparent fara Clarificari (cele urcare de el))
-                TabelBeneficiar += Oferta+CerereClarificare+Clarificari+Documente;
-                // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
-                // TabelFurnizor += Documente+Oferta+Clarificari;
+                TabelBeneficiar += Oferta+CerereClarificare+Documente+Clarificari;
 
-                var Procedure = ServerCache.getProcedurebyID(ProcedureID);
-                if(Procedure !== null || Procedure !== "" || Procedure !== "undefined")
-                {
                     if(Procedure.ID_Client == req.session.User.ID_Client)
-                    // if( true )
                       {
-                                            Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-                                            '    <div class="tile-title">'+
-                                            '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
-                                            '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button></h5>'+
-                                            '<br>'+
-                                            '</div>'+
-                                            '<div class="tile-body">'+
-                                            '    <div class="row procedure-details-holder">'+
-                                            '    <div class="col-md-5">'+
-                                            '    <p id="detail-description" class="procedure-description">'+
-                                            '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br><br>'+
-                                            '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
-                                            '<div id="detail-documents" class="procedure-documents"></div>'+
-                                            '    </div>'+
-                                            '    <div class="col-md-6">'+
-                                            '    <div id="detail-status" style="float: right" class="row">'+
-
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-4">'+
-                                            '            <h5>Tip procedura</h5> </div>'+
-                                            '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-4">'+
-                                            '            <h5>Locatie</h5> </div>'+
-                                            '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-12">'+
-                                            '            <h5>Orar</h5> </div>'+
-                                            '        <div class="col-md-11 col-md-offset-1">'+
-                                            '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
-                                            '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '        </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-12">'+
-                                            '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
-                                            '    </div>'+
-
-                                            //aici
-                                            '</div>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '<div class="clearfix"></div>'+
-                                            '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-                                            '    <div class="tile-title">'+
-                                            '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-                                            '    <br>'+
-                                            '    </div>'+
-                                            '    <div class="tile-body">'+
-                                            '    <input type="file" name="doc" id="js-clarification-file">'+
-                                            '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-                                            '    </div>'+
-                                            '    <div class="clearfix"></div>'+
-                                            '    </div>'+
-                                            '    <div class="row procedure-details-holder">'+
-                                            '   <div class="tile-title">'+
-                                            '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
-                                            '   <br>'+
-                                            '   </div>'+
-                                            '   <div class="tile-body">'+
-                                            TabelBeneficiar+
-                                            '   </div>'+
-                                            '   <div class="clearfix"></div>'+
-                                            '   </div>'+
-                                            '   <div class="clearfix"></div>'+
-                                            '</div>'+
-                                            '</div>';
-                                          }
-                      else
-                      {
-                        // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
-                        TabelFurnizor += Documente+Oferta+Clarificari;
                         Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
                         '    <div class="tile-title">'+
                         '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
@@ -1019,7 +919,83 @@ exports.deleteProcedure = function(req, res, next)
                         '   <br>'+
                         '   </div>'+
                         '   <div class="tile-body">'+
-                        TabelFurnizor+
+                        TabelBeneficiar+
+                        '   </div>'+
+                        '   <div class="clearfix"></div>'+
+                        '   </div>'+
+                        '   <div class="clearfix"></div>'+
+                        '</div>'+
+                        '</div>';
+                      }
+                  else
+                      {
+                        Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+                        '    <div class="tile-title">'+
+                        '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
+                        '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button></h5>'+
+                        '<br>'+
+                        '</div>'+
+                        '<div class="tile-body">'+
+                        '    <div class="row procedure-details-holder">'+
+                        '    <div class="col-md-5">'+
+                        '    <p id="detail-description" class="procedure-description">'+
+                        '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br><br>'+
+                        '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
+                        '<div id="detail-documents" class="procedure-documents"></div>'+
+                        '    </div>'+
+                        '    <div class="col-md-6">'+
+                        '    <div id="detail-status" style="float: right" class="row">'+
+
+                        '    <div class="row">'+
+                        '        <div class="col-md-4">'+
+                        '            <h5>Tip procedura</h5> </div>'+
+                        '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-4">'+
+                        '            <h5>Locatie</h5> </div>'+
+                        '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-12">'+
+                        '            <h5>Orar</h5> </div>'+
+                        '        <div class="col-md-11 col-md-offset-1">'+
+                        '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
+                        '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '        </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-12">'+
+                        '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
+                        '    </div>'+
+
+                        //aici
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="clearfix"></div>'+
+                        '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+                        '    <div class="tile-title">'+
+                        '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+                        '    <br>'+
+                        '    </div>'+
+                        '    <div class="tile-body">'+
+                        '    <input type="file" name="doc" id="js-clarification-file">'+
+                        '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+                        '    </div>'+
+                        '    <div class="clearfix"></div>'+
+                        '    </div>'+
+                        '    <div class="row procedure-details-holder">'+
+                        '   <div class="tile-title">'+
+                        '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
+                        '   <br>'+
+                        '   </div>'+
+                        '   <div class="tile-body">'+
                         '   </div>'+
                         '   <div class="clearfix"></div>'+
                         '   </div>'+
@@ -1029,11 +1005,12 @@ exports.deleteProcedure = function(req, res, next)
                       }
                       res.send(Result);
                     }
-                    else {
-                      console.log("invalid prcedure number");
-                      res.sendStatus(500);
-                      return false;
-                    }
+                  // }
+                  //   else {
+                  //     console.log("invalid prcedure number");
+                  //     res.sendStatus(500);
+                  //     return false;
+                  //   }
               }
           });
     });

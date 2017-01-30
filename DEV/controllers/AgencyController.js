@@ -52,7 +52,14 @@ exports.getAgencyDetails = function(req, res, next)
         WSres.on('end', function()
         {
 
-            data = JSON.parse(data);
+          if( ServerCache.testJSON(data) == false)
+          {
+            console.log(data);
+            res.sendStatus(500);
+            return false;
+          }
+
+          data = JSON.parse(data);
 
             if(data.Result == "Security Audit Failed" || data === 'undefined')
                 {

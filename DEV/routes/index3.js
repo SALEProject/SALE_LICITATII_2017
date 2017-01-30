@@ -21,7 +21,7 @@ var NodeMailerController = require('../controllers/NodeMailerController');
 var CatalogController = require('../controllers/CatalogController');
 var TestController = require('../controllers/TestController');
 var ProcedureFormsController = require('../controllers/ProcedureFormsController');
-// var UploadFileController = require('../controllers/UploadFileController');
+var UploadFileController = require('../controllers/UploadFileController');
 var DownloadController = require('../controllers/DownloadController');
 var FillProcedureParams = require('../controllers/FillProcedureParams');
 
@@ -113,10 +113,13 @@ router.post('/api/upload/file', upload.any(), function(req,res,next) {
     WSrequest.end();
   });
 
-router.post('/api/download/downloadfile', DownloadController.getDocument);
-router.post('/api/generateDetails/get', ProcedureController.generateDetails);
+router.post('/api/download/downloadfile', DownloadController.getDocument)
+
+router.post('/api/generateDetails/get', ProcedureController.generateDetails)
 router.post('/api/fillprocedureparams/post', FillProcedureParams.getProcedureParams);
+
 router.post('/api/forms/get', ProcedureFormsController.getForms);
+
 router.get('/test', TestController.test);
 router.post('/test', TestController.test);
 
@@ -146,7 +149,9 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', AccountController.Register);
+
 router.get('/logout', AccountController.Logout);
+
 router.post('/', AccountController.LoginPOST);
 
 //AgencyController
@@ -173,6 +178,7 @@ router.post('/api/notification/get', NotificationController.getAlerts);
 // router.get('/api/notification/get', NotificationController.getAlerts);
 router.post('/api/editProcedure/variables', ProcedureController.getProcedureVariables);
 
+
 //ProceduresController
 router.get('/api/procedure/get', ProcedureController.getProcedures);
 router.post('/api/procedure/add', ProcedureController.addProcedure);
@@ -182,6 +188,9 @@ router.post('/api/procedure/delete', ProcedureController.deleteProcedure);
 
 //TimeController
 router.get('/api/time/get', TimeController.servertime);
+// router.post('/api/upload/file', UploadFileController.post);
+
+
 
 //Other
 router.get('/dev', function(req, res, next) {

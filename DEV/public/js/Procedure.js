@@ -38,21 +38,29 @@ function getProcedureVariablesData(id)
                         for (var i = 0; i < data.length; i++) {
                           if(data[i].Key == "@Options.ClarificationRequestsDeadline")
                           {
-                            $('#Form1ProcedureClarificationRequestsDeadline').datetimepicker({
-                              defaultDate: data[i].Value});
+                              $('#Form1ProcedureClarificationRequestsDeadline').data("DateTimePicker").date(moment(data[i].Value,"YYYY-MM-DD HH:mm"));
+                              $('#form-6').find("[rel='"+data[i].Key+"']").html(moment(data[i].Value).format ("YYYY-MM-DD HH:mm"));
                               //defaultDate: new Date(data[i].Value).getTime()});
                           }
                           else if(data[i].Key == "@Options.TendersReceiptDeadline")
                           {
-                            $('#Form1ProcedureTendersReceiptDeadline').datetimepicker({
-                              defaultDate: data[i].Value});
+                            $('#Form1ProcedureTendersReceiptDeadline').data("DateTimePicker").date(moment(data[i].Value,"YYYY-MM-DD HH:mm"));
+                            $('#form-6').find("[rel='"+data[i].Key+"']").html(moment(data[i].Value).format ("YYYY-MM-DD HH:mm"));
                           }
                           else if(data[i].Key == "@Options.TendersOpeningDate")
                           {
-                            $('#Form1ProcedureTendersOpeningDate').datetimepicker({
-                              defaultDate: data[i].Value});
+                            $('#Form1ProcedureTendersOpeningDate').data("DateTimePicker").date(moment(data[i].Value,"YYYY-MM-DD HH:mm"));
+                            $('#form-6').find("[rel='"+data[i].Key+"']").html(moment(data[i].Value).format ("YYYY-MM-DD HH:mm"));
                           }
+                          else if(data[i].Key == "@Procedure.ID_ProcedureType")
+                          {
+                            $( 'select[rel="'+data[i].Key+'"]').val(data[i].Value).attr("selected", true);
+                            $( 'select[rel="'+data[i].Key+'"]').val(data[i].Value);
+                            $('#form-6').find("[rel='"+data[i].Key+"']").html($("#Form1ProcedureID_ProcedureType option[value='"+data[i].Value+"']").text());
+                          }
+
                           else{
+                            $('#form-6').find("[rel='"+data[i].Key+"']").html(data[i].Value);
                             $( "input[rel='"+data[i].Key+"'],textarea[rel='"+data[i].Key+"']").val(data[i].Value);
                             $( "input[rel='"+data[i].Key+"'],textarea[rel='"+data[i].Key+"']").text(data[i].Value);
                             $( 'select[rel="'+data[i].Key+'"]').val(data[i].Value).attr("selected", true);
@@ -208,7 +216,7 @@ else
 function generateDetails(id)
     {
         $.ajax({
-            url: "/test",
+            url: "/api/generateDetails/get",
             method: 'post',
             async: true,
             data: JSON.stringify({'id':id}),

@@ -611,3 +611,15 @@ ServerCache.getTranslationLL = function (searchFor,lang)
           }
       console.log("Error at TranslationsEngineFunction: "+searchFor+" not found!");
 }
+
+
+ServerCache.testJSON = function (data)
+{
+    try{
+        JSON.parse(data);
+        return true;
+    }
+    catch (error){
+        return false;
+    }
+}

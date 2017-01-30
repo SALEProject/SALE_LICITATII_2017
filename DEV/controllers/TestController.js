@@ -13,116 +13,430 @@ var moment = require('moment');
 // var SecurityCheck = require('../controllers/SecurityCheck.js');
 //ServerCache.getProcedureVariables(4192,function (response) {
 // res.send(response) });
-
-exports.test = function(req, res, next)
 // {
 //   res.send(ServerCache["ID_ContractTypeFIXED"]);
 // }
+
+// {
+//   var FileName = "Document.pdf";
+//   if( req.body.filename )
+//       {
+//         FileName = req.body.filename;
+//       }
+//
+//   if( req.body.path )
+//   {
+//       // res.download( req.body.path, FileName);
+//       res.download('D:\\deving\\uploads\\t6xyg1484736091818.doc', FileName);
+//   }
+//
+//   else {
+//       // res.send(500);
+//       res.download('D:\\deving\\uploads\\t6xyg1484736091818.doc', FileName);
+//   }
+//
+// }
+exports.test = function(req, res, next)
+
 {
-  var id = req.body.id;
-  var Procedure = ServerCache.getProcedurebyID(id);
-  var toAppend = "";
-  if(Procedure !== null || Procedure !== "")
-  {
-      if(Procedure.ID_Client == req.session.User.ID_Client)
-        {
-                              toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-                              '    <div class="tile-title">'+
-                              '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span></h5>'+
-                              '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button>'+
-                              '<br>'+
-                              '</div>'+
-                              '<div class="tile-body">'+
-                              '    <div class="row procedure-details-holder">'+
-                              '    <div class="col-md-5">'+
-                              '    <p id="detail-description" class="procedure-description"><strong>Descrierea procedurii:</strong> <br>' + Procedure.Description + '</p>'+
-                              '<div id="detail-documents" class="procedure-documents"></div>'+
-                              '    </div>'+
-                              '    <div class="col-md-6">'+
-                              '    <div id="detail-status" class="row">'+
-                              '</div>'+
-                              '</div>'+
-                              '</div>'+
-                              '<div class="clearfix"></div>'+
-                              '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-                              '    <div class="tile-title">'+
-                              '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-                              '    <br>'+
-                              '    </div>'+
-                              '    <div class="tile-body">'+
-                              '    <input type="file" name="doc" id="js-clarification-file">'+
-                              '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-                              '    </div>'+
-                              '    <div class="clearfix"></div>'+
-                              '    </div>'+
-                              '    <div class="js-offer-container col-md-6 col-xs-12">'+
-                              '   <div class="tile-title">'+
-                              '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
-                              '   <br>'+
-                              '   </div>'+
-                              '   <div class="tile-body">'+
-                              '   <p>[PH]OFFFERS HERE viitor get offer aici</p>'+
-                              '   </div>'+
-                              '   <div class="clearfix"></div>'+
-                              '   </div>'+
-                              '   <div class="clearfix"></div>'+
-                              '</div>'+
-                              '</div>';
-                              res.send(toAppend);
-        }
-        else
-        {
-          toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-          '    <div class="tile-title">'+
-          '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">NONONONONONO1111111</span></h5>'+
-          '<br>'+
-          '</div>'+
-          '<div class="tile-body">'+
-          '    <div class="row procedure-details-holder">'+
-          '    <div class="col-md-5">'+
-          '    <p id="detail-description" class="procedure-description">NONONONONONO</p>'+
-          '<div id="detail-documents" class="procedure-documents"></div>'+
-          '    </div>'+
-          '    <div class="col-md-6">'+
-          '    <div id="detail-status" class="row">'+
-          '</div>'+
-          '</div>'+
-          '</div>'+
-          '<div class="clearfix"></div>'+
-          '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-          '    <div class="tile-title">'+
-          '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-          '    <br>'+
-          '    </div>'+
-          '    <div class="tile-body">'+
-          '    <input type="file" name="doc" id="js-clarification-file">'+
-          '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-          '    </div>'+
-          '    <div class="clearfix"></div>'+
-          '    </div>'+
-          '    <div class="js-offer-container col-md-6 col-xs-12">'+
-          '   <div class="tile-title">'+
-          '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
-          '   <br>'+
-          '   </div>'+
-          '   <div class="tile-body">'+
-          '   <input type="file" name="offer_doc" id="js-offer-file">'+
-          '   <input type="text" name="offer_price" class="js-offer-input" data-field="Price" placeholder="Pret"><br><br>'+
-          '   <input type="text" name="offer_deadline" class="js-offer-input" data-field="Deadline" placeholder="Delivery_deadline"><br><br>'+
-          '   <input type="button" class="btn btn-success btn-cons js-offer-start-upload" value="Submit">'+
-          '   </div>'+
-          '   <div class="clearfix"></div>'+
-          '   </div>'+
-          '   <div class="clearfix"></div>'+
-          '</div>'+
-          '</div>';
-          res.send(toAppend);
-        }
-  }
-    else {
-      res.send("error");
-    }
+
+
+var UserID = 161;
+var ProcedureID = 6202;
+
+// test documentzzzzzz
+console.log("in test controller");
+
+var WSoptions =
+{
+    host: ConfigFile.WebServiceIP,
+    path: ConfigFile.WebServiceURLDIR+'/BRMRead.svc/select/Procedures/getProcedureDocuments',
+    port: ConfigFile.WebServicePORT,
+    method: 'POST',
+    headers:
+      {
+        'Content-Type': 'text/plain'
+      }
 };
+
+var reqData = JSON.stringify
+(
+{
+      "SessionId": ConfigFile.WebServiceSessionID,
+      "currentState": "login",
+      "objects":
+                [
+                  {
+                    Arguments:
+                    {
+                      "ID_Procedure": ProcedureID,
+                    }
+                  }
+                ]
+  }
+);
+
+var WSrequest = http.request(WSoptions, function(WSres)
+{
+    var data = '';
+    WSres.on('data', function(chunk)
+      {
+          data += chunk;
+      });
+    WSres.on('end', function()
+      {
+        if( ServerCache.testJSON(data) == false)
+        {
+          console.log(data);
+          res.sendStatus(500);
+          return false;
+        }
+
+        data = JSON.parse(data);
+
+          if(data.Result == "Security Audit Failed" || data === 'undefined')
+              {
+                    console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+                    res.redirect ('/logout');
+              }
+
+          else if (data.ErrorCode != 0 || data === 'undefined')
+              {
+                  res.sendStatus("ErrorCode: "+JSON.stringify(data.Result));
+              }
+
+        else
+          {
+            //ALL OK
+            var Result = '';
+            var Oferta ='<h6> Oferte </h6>'+
+                        '<table class="table table-hover table-condensed">'+
+                        '<tr>'+
+                        '<th style="max-width: 250px">Data</th>'+
+                        '<th style="max-width: 250px">Ofertant</th>'+
+                        '<th style="max-width: 250px">Valoare</th>'+
+                        '<th style="max-width: 250px">Link</th>'+
+                        '</tr>';
+            var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
+                        '<table class="table table-hover table-condensed">'+
+                        '<tr>'+
+                        '<th style="max-width: 250px">Data</th>'+
+                        '<th style="max-width: 250px">Ofertant</th>'+
+                        '<th style="max-width: 250px">Link</th>'+
+                        '</tr>';
+
+            var Clarificari ='<h6> Clarificari </h6>'+
+                        '<table class="table table-hover table-condensed">'+
+                        '<tr>'+
+                        '<th style="max-width: 250px">Data</th>'+
+                        '<th style="max-width: 250px">Ofertant</th>'+
+                        '<th style="max-width: 250px">Link</th>'+
+                        '</tr>';
+
+            var Documente ='<h6> Documente </h6>'+
+                        '<table class="table table-hover table-condensed">'+
+                        '<tr>'+
+                        '<th style="max-width: 250px">Nume</th>'+
+                        '<th style="max-width: 250px">Data</th>'+
+                        '<th style="max-width: 250px">Autor</th>'+
+                        '<th style="max-width: 250px">Link</th>'+
+                        '</tr>';
+
+            for (var i = 0; i < data.Result.Rows.length; i++)
+            {
+              switch (data.Result.Rows[i].Name) {
+                case "Oferta":
+                Oferta += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+                  break;
+                case "Referat de necesitate":
+                Documente += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+                  break;
+                case "Nota de fundamentare":
+                Documente += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+                  break;
+                case "Fisa de date":
+                Documente += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+                  break;
+                case "Cerere de clarificare":
+                CerereClarificare += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+                  break;
+
+                  case "Clarificare":
+                  Clarificari += '<tr>'+
+                            '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                            '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                            '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                            '</tr>';
+                    break;
+                default:
+                Documente += '<tr>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+                          '</tr>';
+
+              }
+            }
+            Oferta += '</table>';
+            Documente += '</table>';
+            CerereClarificare += '</table>';
+            Clarificari += '</table>';
+            Result += Oferta+Documente+CerereClarificare+Clarificari;
+            res.send(Result);
+          }
+      });
+});
+
+WSrequest.write(reqData);
+WSrequest.end();
+}
+
+// {
+//       var UserID = 161;
+//       var ProcedureID = 4169;
+//
+//     // test documentzzzzzz
+//     console.log("in test controller");
+//
+//   var WSoptions =
+//     {
+//           host: ConfigFile.WebServiceIP,
+//           path: ConfigFile.WebServiceURLDIR+'/BRMRead.svc/select/Procedures/getProcedureDocuments',
+//           port: ConfigFile.WebServicePORT,
+//           method: 'POST',
+//           headers:
+//             {
+//               'Content-Type': 'text/plain'
+//             }
+//     };
+//
+//   var reqData = JSON.stringify
+//     (
+//       {
+//             "SessionId": ConfigFile.WebServiceSessionID,
+//             "currentState": "login",
+//             "objects":
+//                       [
+//                     		{
+//                     			Arguments:
+//                     			{
+//                     				"ID_Procedure": ProcedureID,
+//                     			}
+//                     		}
+//                     	]
+//         }
+//     );
+//
+//     var WSrequest = http.request(WSoptions, function(WSres)
+//       {
+//           var data = '';
+//           WSres.on('data', function(chunk)
+//             {
+//                 data += chunk;
+//             });
+//           WSres.on('end', function()
+//             {
+//
+//               data = JSON.parse(data);
+//
+//                 if(data.Result == "Security Audit Failed" || data === 'undefined')
+//                     {
+//                           console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+//                           res.redirect ('/logout');
+//                     }
+//
+//                 else if (data.ErrorCode != 0 || data === 'undefined')
+//                     {
+//                         res.sendStatus("ErrorCode: "+JSON.stringify(data.Result));
+//                     }
+//
+//               else
+//                 {
+//                   //ALL OK
+//                   var Result = '';
+//                   var Oferta ='<h3> Oferte </h3>'+
+//                               '<table class="table"'+
+//                               '<tr>'+
+//                               '<th>Data</th>'+
+//                               '<th>Ofertant</th>'+
+//                               '<th>Valoare</th>'+
+//                               '<th>Link</th>'+
+//                               '</tr>';
+//                   for (var i = 0; i < data.Result.Rows.length; i++) {
+//                     if(data.Result.Rows[i].ID_Procedure == ProcedureID && data.Result.Rows[i].ID_CLient == UserID){
+//                         //Get offers
+//                         if( data.Result.Rows[i].Name == "Oferta" && Number.isInteger(data.Result.Rows[i].Value))
+//                         {
+//                           // Result += '<p>Oferte</p>'+
+//                           //           '<p>'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD")+' </p>'+
+//                           //           '<p>'+data.Result.Rows[i].AgencyName+' </p>'+
+//                           //           '<p>'+data.Result.Rows[i].Value+' </p>'+
+//                           //           '<button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+');">Download</button>';
+//
+//                           Oferta += '<tr>'+
+//                                     '<td>'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                                     '<td>'+data.Result.Rows[i].AgencyName+'</td>'+
+//                                     '<td>'+data.Result.Rows[i].Value+' lei</td>'+
+//                                     '<td><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                                     '</tr>';
+//
+//                         }
+//
+//                     }
+//                   }
+//                   Oferta += '</table>';
+//                   Result += Oferta;
+//                   res.send(Result);
+//                 }
+//                 // {
+//                 //   //ALL OK
+//                 //   var Result = [];
+//                 //   for (var i = 0; i < data.Result.Rows.length; i++) {
+//                 //     if(data.Result.Rows[i].ID_CLient == UserID){
+//                 //         // console.log(data.Result.Rows[i])
+//                 //         Result.push(data.Result.Rows[i])
+//                 //     }
+//                 //   }
+//                 //   res.send(Result);
+//                 // }
+//
+//             });
+//
+//       });
+//
+//     WSrequest.write(reqData);
+//     WSrequest.end();
+// 	}
+//
+//   var id = req.body.id;
+//   var Procedure = ServerCache.getProcedurebyID(id);
+//   var toAppend = "";
+//   if(Procedure !== null || Procedure !== "")
+//   {
+//       if(Procedure.ID_Client == req.session.User.ID_Client)
+//         {
+//                               toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+//                               '    <div class="tile-title">'+
+//                               '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span></h5>'+
+//                               '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button>'+
+//                               '<br>'+
+//                               '</div>'+
+//                               '<div class="tile-body">'+
+//                               '    <div class="row procedure-details-holder">'+
+//                               '    <div class="col-md-5">'+
+//                               '    <p id="detail-description" class="procedure-description"><strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
+//                               '<div id="detail-documents" class="procedure-documents"></div>'+
+//                               '    </div>'+
+//                               '    <div class="col-md-6">'+
+//                               '    <div id="detail-status" class="row">'+
+//                               '</div>'+
+//                               '</div>'+
+//                               '</div>'+
+//                               '<div class="clearfix"></div>'+
+//                               '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+//                               '    <div class="tile-title">'+
+//                               '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+//                               '    <br>'+
+//                               '    </div>'+
+//                               '    <div class="tile-body">'+
+//                               '    <input type="file" name="doc" id="js-clarification-file">'+
+//                               '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+//                               '    </div>'+
+//                               '    <div class="clearfix"></div>'+
+//                               '    </div>'+
+//                               '    <div class="js-offer-container col-md-6 col-xs-12">'+
+//                               '   <div class="tile-title">'+
+//                               '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
+//                               '   <br>'+
+//                               '   </div>'+
+//                               '   <div class="tile-body">'+
+//                               '   <p>[PH]OFFFERS HERE viitor get offer aici</p>'+
+//                               '   </div>'+
+//                               '   <div class="clearfix"></div>'+
+//                               '   </div>'+
+//                               '   <div class="clearfix"></div>'+
+//                               '</div>'+
+//                               '</div>';
+//                               res.send(toAppend);
+//         }
+//         else
+//         {
+//           toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+//           '    <div class="tile-title">'+
+//           '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">NONONONONONO1111111</span></h5>'+
+//           '<br>'+
+//           '</div>'+
+//           '<div class="tile-body">'+
+//           '    <div class="row procedure-details-holder">'+
+//           '    <div class="col-md-5">'+
+//           '    <p id="detail-description" class="procedure-description">NONONONONONO</p>'+
+//           '<div id="detail-documents" class="procedure-documents"></div>'+
+//           '    </div>'+
+//           '    <div class="col-md-6">'+
+//           '    <div id="detail-status" class="row">'+
+//           '</div>'+
+//           '</div>'+
+//           '</div>'+
+//           '<div class="clearfix"></div>'+
+//           '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+//           '    <div class="tile-title">'+
+//           '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+//           '    <br>'+
+//           '    </div>'+
+//           '    <div class="tile-body">'+
+//           '    <input type="file" name="doc" id="js-clarification-file">'+
+//           '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+//           '    </div>'+
+//           '    <div class="clearfix"></div>'+
+//           '    </div>'+
+//           '    <div class="js-offer-container col-md-6 col-xs-12">'+
+//           '   <div class="tile-title">'+
+//           '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
+//           '   <br>'+
+//           '   </div>'+
+//           '   <div class="tile-body">'+
+//           '   <input type="file" name="offer_doc" id="js-offer-file">'+
+//           '   <input type="text" name="offer_price" class="js-offer-input" data-field="Price" placeholder="Pret"><br><br>'+
+//           '   <input type="text" name="offer_deadline" class="js-offer-input" data-field="Deadline" placeholder="Delivery_deadline"><br><br>'+
+//           '   <input type="button" class="btn btn-success btn-cons js-offer-start-upload" value="Submit">'+
+//           '   </div>'+
+//           '   <div class="clearfix"></div>'+
+//           '   </div>'+
+//           '   <div class="clearfix"></div>'+
+//           '</div>'+
+//           '</div>';
+//           res.send(toAppend);
+//         }
+//   }
+//     else {
+//       res.send("error");
+//     }
+// };
 //
 //
 //
