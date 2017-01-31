@@ -16,6 +16,7 @@ exports.getForms = function(req, res, next)
 
     var step = req.body.step;
     var id = req.body.id;
+    if (step != 6) {
     var timerStart=Date.now();
     var WSoptions =
   {
@@ -237,6 +238,116 @@ WSrequest = http.request(WSoptions, function(WSres)
 
 WSrequest.write(reqData);
 WSrequest.end();
+
+    }
+    else {
+      var Result = "";
+      var Procedure = ServerCache.getProcedurebyID(id);
+      Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+      '    <div class="tile-title">'+
+      '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
+      '<br>'+
+      '</div>'+
+      '<div class="tile-body">'+
+      '    <div class="row procedure-details-holder">'+
+      '    <div class="col-md-5">'+
+      '    <p id="detail-description" class="procedure-description">'+
+      '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br><br>'+
+      '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
+      '<div id="detail-documents" class="procedure-documents"></div>'+
+      '    </div>'+
+      '    <div class="col-md-6">'+
+      '    <div id="detail-status" style="float: right" class="row">'+
+      '    <div class="row">'+
+      '        <div class="col-md-4">'+
+      '            <h5>Tip procedura</h5> </div>'+
+      '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
+      '    </div>'+
+      '    <div class="row">'+
+      '        <div class="col-md-4">'+
+      '            <h5>Locatie</h5> </div>'+
+      '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
+      '    </div>'+
+      '    <div class="row">'+
+      '        <div class="col-md-12">'+
+      '            <h5>Orar</h5> </div>'+
+      '        <div class="col-md-11 col-md-offset-1">'+
+      '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
+      '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+      '            </p>'+
+      '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+      '            </p>'+
+      '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
+      '            </p>'+
+      '        </div>'+
+      '    </div>'+
+      '    <div class="row">'+
+      '        <div class="col-md-12">'+
+      '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
+      '    </div>'+
+      '</div>'+
+      '</div>'+
+      '</div>'+
+      '<div class="clearfix"></div>'+
+      '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+      '    <div class="tile-title">'+
+      '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+      '    <br>'+
+      '    </div>'+
+      '    <div class="tile-body">'+
+      '    <input type="file" name="doc" id="js-clarification-file">'+
+      '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+      '    </div>'+
+      '    <div class="clearfix"></div>'+
+      '    </div>'+
+      '    <div class="row procedure-details-holder">'+
+      '   <div class="tile-title">'+
+      '   <br>'+
+      '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
+      '   <br>'+
+      '<form method="post" name="filecerere" onsubmit="return UploadFile(this);">'+
+      '<label class="btn btn-success">'+
+      'Referat de necesitate.pdf<input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+      '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+      '      <input type="hidden" name="DocName" value="Referat de necesitate">'+
+        '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+      '</form>'+
+      '   <br>'+
+      '<form method="post" name="filecerere" onsubmit="return UploadFile(this);">'+
+      '<label class="btn btn-success">'+
+      'Nota de fundamentare.pdf<input style="display: none;" type="file" accept=".pdf" name="file" required />'+
+      '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+      '      <input type="hidden" name="DocName" value="Nota de fundamentare">'+
+      '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+      '</form>'+
+      '   <br>'+
+      '<form method="post" name="filecerere" onsubmit="return UploadFile(this);">'+
+      '<label class="btn btn-success">'+
+      'Fisa de date.pdf<input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+      '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+      '      <input type="hidden" name="DocName" value="Fisa de date">'+
+      '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+      '</form>'+
+      '   <br>'+
+      '<form method="post" name="filecerere" onsubmit="return UploadFile(this);">'+
+      '<label class="btn btn-success">'+
+      'Caiet Saricini.pdf <input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+      '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+      '      <input type="hidden" name="DocName" value="Caiet Saricini">'+
+      '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+      '</form>'+
+      '   <br>'+
+      '</div>'+
+      '   </div>'+
+      '   <div class="tile-body">'+
+      '   </div>'+
+      '   <div class="clearfix"></div>'+
+      '   </div>'+
+      '   <div class="clearfix"></div>'+
+      '</div>'+
+      '</div>';
+      res.send(Result);
+    }
 };
 
 

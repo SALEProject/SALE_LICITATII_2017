@@ -6,7 +6,9 @@ function getChatHistory() {
         async: true,
         method: "GET",
         success: function ( data ) {
-            $('#chat-list').empty();
+            console.log(data);
+            // $('#chat-list').empty();
+            //With timestamp don't emprty or will appear as empty everytime
             $('#chat-list').append(data);
         }
     })
@@ -27,7 +29,7 @@ function addChatMessage( event ) {
                             Message: Message
                         }),
                         contentType: "application/json",
-                        success: function() {getChatHistory()}
+                        success: function(data) {( console.log(data))}
                     })
                 }
         }

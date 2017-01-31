@@ -1,3 +1,4 @@
+
 function DownloadDocument(id,Pid)
 {
 //   $.ajax({
@@ -8,7 +9,7 @@ function DownloadDocument(id,Pid)
 //     contentType: "application/json",
 //     success: function(data) {},
 // })
-    // target= _blank 
+    // target= _blank
     document.body.innerHTML += '<form id=\'DLF2\' action=\'/api/download/downloadfile\' method=\'POST\'><input type=\'hidden\' name=\'DocumentID\' value='+id+'> <input type=\'hidden\' name=\'ProcedureID\' value='+ Pid +'></form>';
     document.getElementById("DLF2").submit();
     document.getElementById("DLF2").remove();
@@ -30,6 +31,7 @@ function DownloadDocument(id,Pid)
 function NextTab(id)
 {
   var nextStep = $('.nav-tabs > .active').next('li').find('a').attr('data-step');
+  $("#LaunchProcedure").attr('onclick', '');
   $("#form-2-link").removeClass('disabled');
   $("#form-3-link").removeClass('disabled');
   $("#form-4-link").removeClass('disabled');
@@ -74,6 +76,15 @@ function NextTab(id)
                                         $("#procedure-form-"+nextStep).find("div[class*='text-center padding-20 loader']").hide();
                                         $("#form-"+nextStep+"-content").empty();
                                         $("#form-"+nextStep+"-content").append(data);
+                                        $("#LaunchProcedure").attr('onclick', 'launchprocedure('+id+')');
+
+                                        // $("#procedure-form-6").find('input[name^="attr"]:checkbox').each(function(i){
+                                        //    $(this).attr("name",$(this).attr("name")+"[]");
+                                        // });
+                                        // $("#procedure-form-6").each(function(){
+                                        //     $(this).find('input[name="ProcedureID"]').val(id);
+                                        //   })
+
                                       }
           })
         }
@@ -85,7 +96,9 @@ function NextTab(id)
 
 function PrevTab(id)
 {
+
   var nextStep = $('.nav-tabs > .active').prev('li').find('a').attr('data-step');
+  $("#LaunchProcedure").attr('onclick', '');
   $("#form-2-link").removeClass('disabled');
   $("#form-3-link").removeClass('disabled');
   $("#form-4-link").removeClass('disabled');
@@ -207,6 +220,7 @@ function btnShowCatalog() {
 }
 
 function btnCreateNewProcedure() {
+    $("#LaunchProcedure").attr('onclick', '');
     $("#Form1").trigger("reset");
     $('.nav-tabs a:first').tab('show');
     $('#procedureDetailToggle').hide();

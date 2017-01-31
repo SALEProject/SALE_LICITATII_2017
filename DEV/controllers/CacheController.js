@@ -7,14 +7,6 @@ var ServerCache = {};
 var _ = require('underscore')._;
 var moment = require('moment');
 
-
-module.exports =
-{
-  ServerCache
-}
-
-
-
 var StartCache = setInterval(function()
 {
   if(ConfigFile.WebServiceReady == true)
@@ -509,7 +501,7 @@ ServerCache.processProcedure = function (item)
   if(typeof ServerCache[element][value] == 'undefined')
     {
       console.log("");
-      console.log("ERROR adding element -> Procedure "+item.Name+" with ID "+item.Name.ID+" has property "+element+" with the invalid value of "+(value+1)+"!");
+      console.log("ERROR adding element -> Procedure " + item.Name + " with ID " + item.ID + " has property "+element+" with the invalid value of "+(value+1)+"!");
       console.log("");
     }
   else
@@ -623,3 +615,142 @@ ServerCache.testJSON = function (data)
         return false;
     }
 }
+
+
+
+// ServerCache.getProcedurePromise = function (id)
+// {
+//       ServerCache.getmeProcedure(id)
+//       .then((data) => {
+//          data[0]["TimeStamp"] = new Date().getTime();
+//          return data;
+//        })
+//       .then((data) => {
+//          ServerCache.TranslatePromise(data);
+//           return data;
+//         })
+//       .then((data) => {
+//          return data;
+//        })
+//       .catch(function (err) {
+//           console.log(err.stack);
+//           return err;
+//        });
+// };
+
+
+
+ServerCache.getmeProcedure = function (id)
+{
+  return new Promise((resolve, reject) => {
+    var WSoptions =
+  {
+        host: ConfigFile.WebServiceIP,
+        path: ConfigFile.WebServiceURLDIR+"/BRMRead.svc/select/Procedures/getProcedures",
+        port: ConfigFile.WebServicePORT,
+        method: 'POST',
+        headers:
+          {
+            'Content-Type': 'text/plain'
+          }
+  };
+
+var reqData =JSON.stringify(
+    {
+          "SessionId": ConfigFile.WebServiceSessionID,
+          "currentState": 'login',
+          objects:
+            [
+              {"Arguments":{"ID_Procedure":id}}
+            ]
+      }
+    );
+
+WSrequest = http.request(WSoptions, function(WSres)
+  {
+      var data = '';
+      WSres.on('data', function(chunk)
+        {
+            data += chunk;
+        });
+      WSres.on('end', function()
+        {
+          if( ServerCache.testJSON(data) == false)
+          {
+            reject(new Error("Unexptected HTML"));
+            return Error;
+          }
+
+          else {
+            data = JSON.parse(data);
+          }
+
+          if( data == 'undefined' || data.ErrorCode != 0 || data.Success !== true)
+            {
+              reject(new Error(JSON.stringify(data.Result)));
+              return Error;
+            }
+
+          else {
+            if(typeof data.Result.Rows !== "undefined")
+              {
+                resolve(data.Result.Rows);
+                return data.Result.Rows;
+              }
+
+            else {
+                resolve(data.Result);
+                return data.Result;
+            }
+          }
+        });
+  });
+
+WSrequest.write(reqData);
+WSrequest.end();
+  });
+};
+
+
+ServerCache.TranslatePromise = function (procedure)
+{
+return new Promise((resolve, reject) => {
+  var List = {"ID_ContractType": {},"ID_ProcedureType": {},"ID_ProcedureCriterion": {}};
+  for (element in List)
+  {
+    var value = procedure[0][element];
+    procedure[0][element] = ServerCache[element][value-1];
+  }
+  resolve(procedure);
+  });
+};
+
+
+ServerCache.deleteFromCachePromise = function (id)
+{
+  return new Promise((resolve, reject) => {
+  var len = ServerCache.Procedures.length;
+  for (var i = 0; i < len; i++)
+  {
+    if(ServerCache.Procedures[i].ID == id )
+      {
+          ServerCache.Procedures.splice(i, 1);
+          resolve();
+      }
+  }
+        reject(new Error('Not found in ServerCache'));
+  });
+}
+
+ServerCache.addToCachePromise = function (procedure)
+{
+  return new Promise((resolve, reject) => {
+    ServerCache.Procedures.push(procedure[0]);
+    resolve(procedure);
+  });
+}
+
+module.exports = { ServerCache };
+
+
+

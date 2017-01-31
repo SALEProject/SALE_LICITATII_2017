@@ -10,7 +10,8 @@ var ConfigFile = require('../config.js');
 var CacheController = require('../controllers/CacheController.js')
 var ServerCache = CacheController.ServerCache;
 var moment = require('moment');
-// var SecurityCheck = require('../controllers/SecurityCheck.js');
+var Mailer = require('./MailerController.js');
+
 
 
 exports.getProcedureVariables = function (req, res, next)
@@ -109,7 +110,7 @@ exports.getProcedureVariables = function (req, res, next)
 
 exports.getProcedures = function(req, res, next)
   {
-    // console.log( req.session.User );
+
     var Language = "RO";
     var output = {};
     var Procedures = "";
@@ -207,7 +208,7 @@ exports.getProcedures = function(req, res, next)
                                       '</li>';
 
                             }
-                        else
+                        if (req.session.User.UserRole !== " Supraveghetor")
                             {
                             Procedures+= '<li id="procedure-' + ServerCache.Procedures[i].ID + '" class="procedure-item">' +
                               '    <div class="row">' +
@@ -264,11 +265,70 @@ exports.getProcedures = function(req, res, next)
                               '</li>'
                             }
                         }
+
+                        if ( req.session.User.UserRole == " Supraveghetor" && ServerCache.Procedures[i].Status == "review")
+                            {
+                                Procedures+= '<li id="procedure-' + ServerCache.Procedures[i].ID + '" class="procedure-item">' +
+                                  '    <div class="row">' +
+                                  '        <div class="col-md-5 toggle-procedure" onclick=toggleProcedure(' + ServerCache.Procedures[i].ID + ')><a class="procedure-name">' + ServerCache.Procedures[i].Name + '</a>' +
+                                  '            <div class="procedure-details"><span class="procedure-location">' + ServerCache.Procedures[i].Location + '</span>&nbsp;|&nbsp;<span class="procedure-classification"> ' + ServerCache.Procedures[i].Classification  + ' </span>&nbsp;|&nbsp;<span class="procedure-legislation">' + ServerCache.Procedures[i].Legislation + '</span>' +
+                                  '            </div>' +
+                                  '        </div>' +
+                                  '       <div id="procedure-detail-status">' +
+                                  '        <div class="col-md-1"><span class="procedure-type ' + ServerCache.Procedures[i].ID_ProcedureType.Value_RO.toLowerCase().replace (/ /g, "_") + '">' + ServerCache.Procedures[i].ID_ProcedureType["Value_"+Language] + '</span>' +
+                                  '        </div>' +
+                                  '        <div class="col-md-1">' +
+                                  '            <a id="isFav-'+ ServerCache.Procedures[i].ID + '" class="procedure-favourite added" title="Remove_favorite" data-title="Inlaurati ca procedura favorita" style="cursor:pointer !important;" onclick=resetFavouriteProcedure(' + ServerCache.Procedures[i].ID + ')></a>' +
+                                  '        </div>' +
+                                  '        <div class="col-md-1"><span class="procedure-status ' + ServerCache.Procedures[i].Status + '" title="' + ServerCache.Procedures[i].Status + '"></span>' +
+                                  '        </div>' +
+                                  '        <div class="col-md-3">' +
+                                  '            <p class="procedure-time">Lansare<span class="procedure-launch">' + moment (ServerCache.Procedures[i].TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>' +
+                                  '            </p>' +
+                                  '            <p class="procedure-time">Clarificari pana la<span class="procedure-clarifications-deadline">' + moment (ServerCache.Procedures[i].ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>' +
+                                  '            </p>' +
+                                  '            <p class="procedure-time">Termen depunere<span class="procedure-deadline">' + moment (ServerCache.Procedures[i].TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>' +
+                                  '            </p>' +
+                                  '        </div>' +
+                                  '       </div>' +
+                                  '        <div class="col-md-1"><a class="toggle-procedure collapse" onclick=toggleProcedure(' + ServerCache.Procedures[i].ID + ')>&nbsp;</a>' +
+                                  '        </div>' +
+                                  '        <div class="col-md-12 procedure-expandable">' +
+                                  '            <div class="row">' +
+                                  '                <div class="col-md-5">' +
+                                  '                    <p class="procedure-description">' + ServerCache.Procedures[i].Description + '</p>' +
+                                  '                </div>' +
+                                  '                <div class="col-md-6 procedure-offer-details">' +
+                                  '                    <div class="row">' +
+                                  '                        <div class="col-md-3">' +
+                                  '                            <p><strong>Clarificari</strong>' +
+                                  '                            </p>' +
+                                  '                            <p class="procedure-clarifications"></p>' +
+                                  '                      </div>' +
+                                  '                        <div class="col-md-4">' +
+                                  '                            <p><strong>Depuneri oferte</strong>' +
+                                  '                            </p>' +
+                                  '                            <p class="procedure-submission"></p>' +
+                                  '                        </div>' +
+                                  '                        <div class="col-md-5">' +
+                                  '                            <p><strong>Autoritate contractanta</strong>' +
+                                  '                            </p>' +
+                                  '                            <p class="procedure-contracter">' + ServerCache.Procedures[i].OrganizationName + '</p>' +
+                                  '                        </div>' +
+                                  '                    </div><a class="view-procedure btn btn-default" style="cursor: pointer" onclick="generateDetails(' + ServerCache.Procedures[i].ID + ')">'+LabelDetalii["Value_"+Language]+'</a>' +
+                                  '                </div>' +
+                                  '            </div>' +
+                                  '        </div>' +
+                                  '    </div>' +
+                                  '</li>';
+
+                            }
+
                        if (ServerCache.Procedures[i].ID_Client == req.session.User.ID_Client)
                        {
                          myProcedures += '<li class="procedure-item" id=my-procedure-' + ServerCache.Procedures[i].ID + '>' +
                         '<a class="view-procedure" style="cursor: pointer" onclick="generateDetails(' + ServerCache.Procedures[i].ID + ')"><span class="procedure-name">' + ServerCache.Procedures[i].Name + '</span>' +
-                         '<span class="procedure-status ' + ServerCache.Procedures[i].Status + '" title="draft">&nbsp;</span>' +
+                         '<span class="procedure-status ' + ServerCache.Procedures[i].Status + '" title="' + ServerCache.Procedures[i].Status + '">&nbsp;</span>' +
                          '</a><a class="delete-procedure" style="cursor:pointer !important;" onclick="deleteProcedure(' + ServerCache.Procedures[i].ID +')">Anuleaza</a>' +
                          '</li>';
                       }
@@ -332,10 +392,7 @@ var reqData = JSON.stringify
                     "ContestationsSubmission": req.body.ContestationsSubmission,
                     "OtherInformation": req.body.OtherInformation,
                     "Necessity": req.body.Necessity,
-                    "ClassificationIDs": [
-                        2088,
-                        1290
-                    ]
+                    "ClassificationIDs": req.body.ClassificationIDs,
       			}
       		}
       	]
@@ -499,9 +556,6 @@ exports.deleteProcedure = function(req, res, next)
             }
         };
 
-
-
-
         var reqData = JSON.stringify
         (
             {
@@ -536,7 +590,7 @@ exports.deleteProcedure = function(req, res, next)
 
                 if(data.Result == "Security Audit Failed" || data === 'undefined')
                     {
-                          console.log("Procedure FAILED !! "+JSON.stringify(data));
+                          console.log("Procedure FAvalue+1)+ILED !! "+JSON.stringify(data));
                           res.redirect ('/logout');
                     }
 
@@ -562,136 +616,15 @@ exports.deleteProcedure = function(req, res, next)
 
 
     exports.generateDetails = function(req, res, next)
+{
+    // if( req.session.User == "undefined" || req.session.User == "" || req.session.User.ID_Client == "undefined" || req.session.User.ID_Client == "" )
     // {
-    //   if( !req.session.User )
-    //   {
-    //     throw Error('Who is this');
-    //     console.log( Error );
-    //     res.redirect('/logout');
-    //   }
-    //
-    //   else {
-    //
-    //   var id = req.body.id;
-    //   var Procedure = ServerCache.getProcedurebyID(id);
-    //   var toAppend = "";
-    //   if(Procedure !== null || Procedure !== "")
-    //   {
-    //       if(Procedure.ID_Client == req.session.User.ID_Client)
-    //         {
-    //                               toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-    //                               '    <div class="tile-title">'+
-    //                               '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span></h5>'+
-    //                               '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button>'+
-    //                               '<br>'+
-    //                               '</div>'+
-    //                               '<div class="tile-body">'+
-    //                               '    <div class="row procedure-details-holder">'+
-    //                               '    <div class="col-md-5">'+
-    //                               '    <p id="detail-description" class="procedure-description"><strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
-    //                               '<div id="detail-documents" class="procedure-documents"></div>'+
-    //                               '    </div>'+
-    //                               '    <div class="col-md-6">'+
-    //                               '    <div id="detail-status" class="row">'+
-    //                               '</div>'+
-    //                               '</div>'+
-    //                               '</div>'+
-    //                               '<div class="clearfix"></div>'+
-    //                               '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-    //                               '    <div class="tile-title">'+
-    //                               '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-    //                               '    <br>'+
-    //                               '    </div>'+
-    //                               '    <div class="tile-body">'+
-    //                               '    <input type="file" name="doc" id="js-clarification-file">'+
-    //                               '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-    //                               '    </div>'+
-    //                               '    <div class="clearfix"></div>'+
-    //                               '    </div>'+
-    //                               '    <div class="js-offer-container col-md-6 col-xs-12">'+
-    //                               '   <div class="tile-title">'+
-    //                               '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
-    //                               '   <br>'+
-    //                               '   </div>'+
-    //                               '   <div class="tile-body">'+
-    //                               '   <p>[PH]OFFFERS HERE viitor get offer aici</p>'+
-    //                               '   </div>'+
-    //                               '   <div class="clearfix"></div>'+
-    //                               '   </div>'+
-    //                               '   <div class="clearfix"></div>'+
-    //                               '</div>'+
-    //                               '</div>';
-    //                               res.send(toAppend);
-    //         }
-    //         else
-    //         {
-              // toAppend += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-              // '    <div class="tile-title">'+
-              // '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">NONONONONONO1111111</span></h5>'+
-              // '<br>'+
-              // '</div>'+
-              // '<div class="tile-body">'+
-              // '    <div class="row procedure-details-holder">'+
-              // '    <div class="col-md-5">'+
-              // '    <p id="detail-description" class="procedure-description">NONONONONONO</p>'+
-              // '<div id="detail-documents" class="procedure-documents"></div>'+
-              // '    </div>'+
-              // '    <div class="col-md-6">'+
-              // '    <div id="detail-status" class="row">'+
-              // '</div>'+
-              // '</div>'+
-              // '</div>'+
-              // '<div class="clearfix"></div>'+
-              // '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-              // '    <div class="tile-title">'+
-              // '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-              // '    <br>'+
-              // '    </div>'+
-              // '    <div class="tile-body">'+
-              // '    <input type="file" name="doc" id="js-clarification-file">'+
-              // '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-              // '    </div>'+
-              // '    <div class="clearfix"></div>'+
-              // '    </div>'+
-              // '    <div class="js-offer-container col-md-6 col-xs-12">'+
-              // '   <div class="tile-title">'+
-              // '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Offer</span></h5>'+
-              // '   <br>'+
-              // '   </div>'+
-              // '   <div class="tile-body">'+
-              // '   <input type="file" name="offer_doc" id="js-offer-file">'+
-              // '   <input type="text" name="offer_price" class="js-offer-input" data-field="Price" placeholder="Pret"><br><br>'+
-              // '   <input type="text" name="offer_deadline" class="js-offer-input" data-field="Deadline" placeholder="Delivery_deadline"><br><br>'+
-              // '   <input type="button" class="btn btn-success btn-cons js-offer-start-upload" value="Submit">'+
-              // '   </div>'+
-              // '   <div class="clearfix"></div>'+
-              // '   </div>'+
-              // '   <div class="clearfix"></div>'+
-              // '</div>'+
-              // '</div>';
-              // res.send(toAppend);
-    //         }
-    //   }
-    //     else {
-    //       res.send("error");
-    //     }
-    //   }
-    // };
-
-    {
-
-
-    if( req.session.User == "undefined" || req.session.User == "" || req.session.User.ID_Client == "undefined" || req.session.User.ID_Client == "" )
-    {
-      console.log("Session Not Found");
-      res.redirect("/logout");
-      return false;
-    }
+    //   console.log("Session Not Found");
+    //   res.redirect("/logout");
+    //   return false;
+    // }
 
     var ProcedureID = req.body.id;
-
-    // test documentzzzzzz
-    console.log("in test controller");
 
     var WSoptions =
     {
@@ -748,22 +681,34 @@ exports.deleteProcedure = function(req, res, next)
 
               else if (data.ErrorCode != 0 || data === 'undefined')
                   {
-                      res.sendStatus("ErrorCode: "+JSON.stringify(data.Result));
+                      res.send("ErrorCode: "+JSON.stringify(data.Result));
                   }
 
-            else
+              else
               {
-                var MesajTabelGol = '<p>Nu sunt documente incarcate.</p>';
+                var Procedure = ServerCache.getProcedurebyID(ProcedureID);
+                if(Procedure == null || Procedure == "" || Procedure == "undefined") return;
+                
+                var Desemneaza = '';
+                var AdaugaOferta = '';
+                var AdaugaCereredeClarificare = '';
+                var AdaugaClarificare = '';
+                var DesemneazaOferta = '';
+                var EditButton = '';
+                // var MesajTabelGol = '<p>Nu sunt documente incarcate.</p>';
+                var MesajTabelGol = '<p> - </p>';
                 var TabelBeneficiar = '';
                 var TabelFurnizor = '';
+                var TabelAnap = '';
                 var Result = '';
                 var Oferta ='<h6> Oferte </h6>'+
-                            '<table class="table table-hover table-condensed">'+
+                            '<table id="offerbox" class="table table-hover table-condensed">'+
                             '<tr>'+
                             '<th style="max-width: 250px">Data</th>'+
                             '<th style="max-width: 250px">Ofertant</th>'+
                             '<th style="max-width: 250px">Valoare</th>'+
                             '<th style="max-width: 250px">Link</th>'+
+                            '<th style="display: none;max-width: 250px">Castigator</th>'+
                             '</tr>';
                 var EmptyOferta = Oferta;
                 var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
@@ -784,7 +729,7 @@ exports.deleteProcedure = function(req, res, next)
                             '<th style="max-width: 250px">Link</th>'+
                             '</tr>';
                 var EmptyClarificari = Clarificari;
-                var Documente ='<h6> Documente </h6>'+
+                var Documente ='<h6> Documentele procedurii </h6>'+
                             '<table class="table table-hover table-condensed">'+
                             '<tr>'+
                             '<th style="max-width: 250px">Nume</th>'+
@@ -798,12 +743,37 @@ exports.deleteProcedure = function(req, res, next)
                 {
                   switch (data.Result.Rows[i].Name) {
                     case "Oferta":
-                    Oferta += '<tr>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
-                              '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                              '</tr>';
+                    if( data.Result.Rows[i].Value !== "undefined" && data.Result.Rows[i].Value !== "null" && data.Result.Rows[i].Value !== null && isNaN(data.Result.Rows[i].Value) !== true  )
+                    {
+                    
+    		       	console.log("in else if AGENCY "+Procedure.ID_Agency+" session "+req.session.User.ID_Agency);
+                    	if(Procedure.Status == "approved" && Procedure.ID_Agency == req.session.User.ID_Agency)
+		       {
+		       	console.log("in primu if AGENCY "+Procedure.ID_Agency+" session "+req.session.User.ID_Agency);
+		              Oferta += '<tr id="OfferTable-'+data.Result.Rows[i].ID+'">'+
+		                      '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+		                      '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+		                      '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
+		                      '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+		                      '<td style="display: none;max-width: 250px;font-size: 13px;"> Castigator <input type="radio" rel='+data.Result.Rows[i].ID+' name="winnerradio" value='+data.Result.Rows[i].ID+'> </input></td>'+
+		                      '</tr>';
+                      }
+                      else
+                      		       {
+		       	console.log("in else row "+data.Result.Rows[i].ID_Agency+" session "+req.session.User.ID_Agency);
+                      		       if(data.Result.Rows[i].ID_Agency == req.session.User.ID_Agency)
+                      		       {
+		       	console.log("in 2ndif AGENCY "+Procedure.ID_Agency+" session "+req.session.User.ID_Agency);
+					      Oferta += '<tr id="OfferTable-'+data.Result.Rows[i].ID+'">'+
+						      '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+						      '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+						      '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
+						      '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+						      '<td style="display: none;max-width: 250px;font-size: 13px;"> Castigator <input type="radio" rel='+data.Result.Rows[i].ID+' name="winnerradio" value='+data.Result.Rows[i].ID+'> </input></td>'+
+						      '</tr>';
+		                      }
+                      }
+                    }
                       break;
                     case "Referat de necesitate":
                     Documente += '<tr>'+
@@ -861,114 +831,39 @@ exports.deleteProcedure = function(req, res, next)
                 (Oferta === EmptyOferta) ? Oferta = '<h6> Oferte </h6>'+MesajTabelGol : Oferta += '</table>';
                 (CerereClarificare === EmptyCerereClarificare) ? CerereClarificare = '<h6> Cerere de clarificare </h6>'+MesajTabelGol : CerereClarificare += '</table>';
                 (Clarificari === EmptyClarificari) ? Clarificari = '<h6> Clarificari </h6>'+MesajTabelGol : Clarificari += '</table>';
-                (Documente=== EmptyDocumente) ? Documente = '<h6> Documente </h6>'+MesajTabelGol : Documente += '</table>';
+                (Documente=== EmptyDocumente) ? Documente = '<h6> Documentele procedurii </h6>'+MesajTabelGol : Documente += '</table>';
                 // Beneficiar Ordine = 1 Oferta 2 Cereri clarificari 3 Doc urcate (aparent fara Clarificari (cele urcare de el))
-                TabelBeneficiar += Oferta+CerereClarificare+Clarificari+Documente;
+                TabelBeneficiar += Oferta+'<br>'+CerereClarificare+'<br>'+Clarificari+'<br>'+Documente+'<br>';
                 // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
                 // TabelFurnizor += Documente+Oferta+Clarificari;
 
-                var Procedure = ServerCache.getProcedurebyID(ProcedureID);
-                if(Procedure !== null || Procedure !== "" || Procedure !== "undefined")
+
                 {
-                    if(Procedure.ID_Client == req.session.User.ID_Client)
-                    // if( true )
-                      {
-                                            Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
-                                            '    <div class="tile-title">'+
-                                            '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
-                                            '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button></h5>'+
-                                            '<br>'+
-                                            '</div>'+
-                                            '<div class="tile-body">'+
-                                            '    <div class="row procedure-details-holder">'+
-                                            '    <div class="col-md-5">'+
-                                            '    <p id="detail-description" class="procedure-description">'+
-                                            '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br><br>'+
-                                            '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
-                                            '<div id="detail-documents" class="procedure-documents"></div>'+
-                                            '    </div>'+
-                                            '    <div class="col-md-6">'+
-                                            '    <div id="detail-status" style="float: right" class="row">'+
 
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-4">'+
-                                            '            <h5>Tip procedura</h5> </div>'+
-                                            '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-4">'+
-                                            '            <h5>Locatie</h5> </div>'+
-                                            '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-12">'+
-                                            '            <h5>Orar</h5> </div>'+
-                                            '        <div class="col-md-11 col-md-offset-1">'+
-                                            '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
-                                            '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
-                                            '            </p>'+
-                                            '        </div>'+
-                                            '    </div>'+
-                                            '    <div class="row">'+
-                                            '        <div class="col-md-12">'+
-                                            '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
-                                            '    </div>'+
-
-                                            //aici
-                                            '</div>'+
-                                            '</div>'+
-                                            '</div>'+
-                                            '<div class="clearfix"></div>'+
-                                            '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
-                                            '    <div class="tile-title">'+
-                                            '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
-                                            '    <br>'+
-                                            '    </div>'+
-                                            '    <div class="tile-body">'+
-                                            '    <input type="file" name="doc" id="js-clarification-file">'+
-                                            '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
-                                            '    </div>'+
-                                            '    <div class="clearfix"></div>'+
-                                            '    </div>'+
-                                            '    <div class="row procedure-details-holder">'+
-                                            '   <div class="tile-title">'+
-                                            '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
-                                            '   <br>'+
-                                            '   </div>'+
-                                            '   <div class="tile-body">'+
-                                            TabelBeneficiar+
-                                            '   </div>'+
-                                            '   <div class="clearfix"></div>'+
-                                            '   </div>'+
-                                            '   <div class="clearfix"></div>'+
-                                            '</div>'+
-                                            '</div>';
-                                          }
-                      else
+                      if( req.session.User.UserRole == " Supraveghetor" )
                       {
-                        // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
-                        TabelFurnizor += Documente+Oferta+Clarificari;
+                        var ApproveButton =     '<div class="col-md-6 col-md-offset-3" style="text-align: center;">'+
+                                                '   <button class="btn btn-primary" onclick="approveProcedure(' + Procedure.ID + ');">Aproba Procedura</button>'+
+                                                '</div>';
+
+                        TabelAnap = Documente+ApproveButton;
                         Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
                         '    <div class="tile-title">'+
                         '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
-                        '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button></h5>'+
                         '<br>'+
                         '</div>'+
                         '<div class="tile-body">'+
                         '    <div class="row procedure-details-holder">'+
                         '    <div class="col-md-5">'+
                         '    <p id="detail-description" class="procedure-description">'+
-                        '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br><br>'+
+                        '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br>'+
+                        '            <strong>Agentie : ' + Procedure.OrganizationName + ' </strong><br>'+
+                        '<br>'+
                         '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
                         '<div id="detail-documents" class="procedure-documents"></div>'+
                         '    </div>'+
                         '    <div class="col-md-6">'+
                         '    <div id="detail-status" style="float: right" class="row">'+
-
                         '    <div class="row">'+
                         '        <div class="col-md-4">'+
                         '            <h5>Tip procedura</h5> </div>'+
@@ -996,8 +891,6 @@ exports.deleteProcedure = function(req, res, next)
                         '        <div class="col-md-12">'+
                         '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
                         '    </div>'+
-
-                        //aici
                         '</div>'+
                         '</div>'+
                         '</div>'+
@@ -1015,6 +908,232 @@ exports.deleteProcedure = function(req, res, next)
                         '    </div>'+
                         '    <div class="row procedure-details-holder">'+
                         '   <div class="tile-title">'+
+                        '   <br>'+
+                        '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
+                        '   <br>'+
+                        '   </div>'+
+                        '   <div class="tile-body">'+
+                        TabelAnap+
+                        '   </div>'+
+                        '   <div class="clearfix"></div>'+
+                        '   </div>'+
+                        '   <div class="clearfix"></div>'+
+                        '</div>'+
+                        '</div>';
+
+                        res.send(Result);
+                        return true;
+                      }
+
+                    if(Procedure.ID_Client == req.session.User.ID_Client)
+                      {
+                            if(Procedure.Status == "draft")
+                            {
+                              EditButton = '<button onclick="getProcedureVariablesData('+Procedure.ID+');" class="btn btn-primary btn-small" style="float: right !important;z-index: 9999 !important;">Editeaza Procedura</button></h5>';
+                            }
+
+                            // if(moment(Procedure.ClarificationRequestsDeadline).format() < moment().format() )
+                            if(moment(Procedure.ClarificationRequestsDeadline).isAfter() )
+                            {
+                              AdaugaClarificare +=  '<h5> Adauga Clarificare </h5>'+
+                                                    '<form method="post" name="fileclarificare" onsubmit="return UploadFile(this);">'+
+                                                    '<label class="btn btn-success">'+
+                                                    'Clarificare.pdf<input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+                                                    '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+                                                    '      <input type="hidden" name="DocName" value="Clarificare">'+
+                                                    '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+                                                    '</form>'+
+                                                    '<br>';
+                            }
+                            // if(moment(Procedure.TendersOpeningDate).format() > moment().format() )
+                            if(moment(Procedure.TendersOpeningDate).isBefore() && Procedure.Status == 'approved')
+                            {
+                              var Desemneaza = '<button class="btn btn-success btn-cons form-submit" onclick="DesemneazaCastigator();">Desemneaza castigator</button>';
+                              Oferta = Oferta.replace(/display: none;/g, '');
+                              TabelBeneficiar = Oferta+'<br>'+Desemneaza+'<br>'+CerereClarificare+'<br>'+Clarificari+'<br>'+Documente+'<br>';
+                            }
+
+                            if(moment(Procedure.TendersOpeningDate).isBefore() && Procedure.Status == 'closed')
+                            {
+                              var Winner = '<h4> Castigator agentia '+ Procedure.AgencyWinnerName +'</h4>';
+                              TabelBeneficiar = Oferta+'<br>'+Winner+'<br>'+CerereClarificare+'<br>'+Clarificari+'<br>'+Documente+'<br>';
+                            }
+
+
+                                            Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+                                            '    <div class="tile-title">'+
+                                            '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
+                                            EditButton+
+                                            '<br>'+
+                                            '</div>'+
+                                            '<div class="tile-body">'+
+                                            '    <div class="row procedure-details-holder">'+
+                                            '    <div class="col-md-5">'+
+                                            '    <p id="detail-description" class="procedure-description">'+
+                                            '            <strong>Valoare Totala : ' + Procedure.TotalValue + ' Lei</strong><br>'+
+                                            '            <strong>Agentie : ' + Procedure.OrganizationName + ' </strong><br>'+
+                                            '<br>'+
+                                            '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
+                                            '<div id="detail-documents" class="procedure-documents"></div>'+
+                                            '    </div>'+
+                                            '    <div class="col-md-6">'+
+                                            '    <div id="detail-status" style="float: right" class="row">'+
+                                            '    <div class="row">'+
+                                            '        <div class="col-md-4">'+
+                                            '            <h5>Tip procedura</h5> </div>'+
+                                            '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
+                                            '    </div>'+
+                                            '    <div class="row">'+
+                                            '        <div class="col-md-4">'+
+                                            '            <h5>Locatie</h5> </div>'+
+                                            '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
+                                            '    </div>'+
+                                            '    <div class="row">'+
+                                            '        <div class="col-md-12">'+
+                                            '            <h5>Orar</h5> </div>'+
+                                            '        <div class="col-md-11 col-md-offset-1">'+
+                                            '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
+                                            '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                                            '            </p>'+
+                                            '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                                            '            </p>'+
+                                            '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                                            '            </p>'+
+                                            '        </div>'+
+                                            '    </div>'+
+                                            '    <div class="row">'+
+                                            '        <div class="col-md-12">'+
+                                            '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
+                                            '    </div>'+
+                                            '</div>'+
+                                            '</div>'+
+                                            '</div>'+
+                                            '<div class="clearfix"></div>'+
+                                            '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+                                            '    <div class="tile-title">'+
+                                            '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+                                            '    <br>'+
+                                            '    </div>'+
+                                            '    <div class="tile-body">'+
+                                            '    <input type="file" name="doc" id="js-clarification-file">'+
+                                            '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+                                            '    </div>'+
+                                            '    <div class="clearfix"></div>'+
+                                            '    </div>'+
+                                            '    <div class="row procedure-details-holder">'+
+                                            '   <div class="tile-title">'+
+                                            AdaugaClarificare+
+                                            '   <br>'+
+                                            '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
+                                            '   <br>'+
+                                            '   </div>'+
+                                            '   <div class="tile-body">'+
+                                            TabelBeneficiar+
+                                            '   </div>'+
+                                            '   <div class="clearfix"></div>'+
+                                            '   </div>'+
+                                            '   <div class="clearfix"></div>'+
+                                            '</div>'+
+                                            '</div>';
+                                          }
+                      else
+                      {
+                        console.log(ServerCache.ServerTime);
+                        // if(moment(Procedure.ClarificationRequestsDeadline).format() > moment().format() )
+                        if(moment(Procedure.ClarificationRequestsDeadline).isAfter() )
+                        {
+                          // AdaugaCereredeClarificare += '<button class="btn btn-success btn-cons form-submit" onclick="alert(\'test up cerere\')">Upload Cerere de Clarificare</button>'
+                          AdaugaCereredeClarificare =    '<h5> Adauga o cerere de clarificare</h5>'+
+                                                          '<form method="post" name="filecereredeclarificare" onsubmit="return UploadFile(this);">'+
+                                                          '<label class="btn btn-success">'+
+                                                          'Cerere de clarificare.pdf<input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+                                                          '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+                                                          '      <input type="hidden" name="DocName" value="Cerere de clarificare">'+
+                                                          '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+                                                          '</form>'+
+                                                          '<br>';
+                        }
+
+                        if(moment(Procedure.TendersReceiptDeadline).isAfter() )
+                        // if(moment(Procedure.TendersReceiptDeadline).format() > moment().format() )
+                        {
+                          AdaugaOferta =        '<h5> Adauga Oferta </h5>'+
+                                                '<form method="post" name="fileOferta" onsubmit="return UploadFile(this);">'+
+                                                '<span class=""><i class="glyphicon glyphicon-usd"></i></span> <input class="" style="max-width: 110px;" placeholder="Valoare in Lei" type="text" name="OfferValue"> '+
+                                                '<label class="btn btn-success">'+
+                                                'Ofeta.pdf<input type="file" style="display: none;" accept=".pdf" name="file" required />'+
+                                                '      <input type="hidden" name="ProcedureID" value='+ Procedure.ID +'>'+
+                                                '      <input type="hidden" name="DocName" value="Oferta">'+
+                                                '</label> <input class="btn btn-warning"  type="submit" value="Upload" />'+
+                                                '</form>'+
+                                                '<br>';
+                        }
+
+                        // Furnizor 1 Documente 2 oferta mea cu buton oferta noua 3 Cereri de clarificare cu buton de new cerere
+                        TabelFurnizor += Documente+'<br>'+Oferta+'<br>'+Clarificari+'<br>';
+                        Result += '<div class="tile m-b-10 data-container procedure-item" id="procedure-detail-container" style="display: block;">'+
+                        '    <div class="tile-title">'+
+                        '    <h5 class="no-margin m-b-10 bold"><span id="detail-name" class="procedure-name">Procedura: ' + Procedure.Name + '</span>'+
+                        '<br>'+
+                        '</div>'+
+                        '<div class="tile-body">'+
+                        '    <div class="row procedure-details-holder">'+
+                        '    <div class="col-md-5">'+
+                        '    <p id="detail-description" class="procedure-description">'+
+                        '            <strong>Agentie : ' + Procedure.OrganizationName + ' </strong><br>'+
+                        '<br>'+
+                        '<strong>Descrierea procedurii: </strong> <br>' + Procedure.Description + '</p>'+
+                        '<div id="detail-documents" class="procedure-documents"></div>'+
+                        '    </div>'+
+                        '    <div class="col-md-6">'+
+                        '    <div id="detail-status" style="float: right" class="row">'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-4">'+
+                        '            <h5>Tip procedura</h5> </div>'+
+                        '        <div class="col-md-8"> <span rel="@Procedure.ID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type">' + Procedure.ID_ProcedureType.Value_RO + '</span> </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-4">'+
+                        '            <h5>Locatie</h5> </div>'+
+                        '        <div class="col-md-9"> <span rel="@Procedure.Location" name="FormProcedureLocation" class="procedure-location">' + Procedure.Location + '</span> </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-12">'+
+                        '            <h5>Orar</h5> </div>'+
+                        '        <div class="col-md-11 col-md-offset-1">'+
+                        '            <!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->'+
+                        '            <p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" name="FormProcedureClarificationRequestsDeadline" class="procedure-clarifications">' + moment (Procedure.ClarificationRequestsDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '            <p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline">' + moment (Procedure.TendersReceiptDeadline).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '            <p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline">' + moment (Procedure.TendersOpeningDate).format ("YYYY-MM-DD HH:mm") + '</span>'+
+                        '            </p>'+
+                        '        </div>'+
+                        '    </div>'+
+                        '    <div class="row">'+
+                        '        <div class="col-md-12">'+
+                        '            <h5>Coduri CPV</h5> <span rel="@Procedure.ClassificationIDs" >'+ Procedure.Classification +'</span> </div>'+
+                        '    </div>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+                        '<div class="clearfix"></div>'+
+                        '    <div class="js-clarification-request-container col-md-6 col-xs-12" style="display: none;">'+
+                        '    <div class="tile-title">'+
+                        '    <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Clarification_request</span></h5>'+
+                        '    <br>'+
+                        '    </div>'+
+                        '    <div class="tile-body">'+
+                        '    <input type="file" name="doc" id="js-clarification-file">'+
+                        '    <input type="button" class="btn btn-success btn-cons js-clarification-start-upload" value="Submit">'+
+                        '    </div>'+
+                        '    <div class="clearfix"></div>'+
+                        '    </div>'+
+                        '    <div class="row procedure-details-holder">'+
+                        '   <div class="tile-title">'+
+                        AdaugaCereredeClarificare+
+                        AdaugaOferta+
+                        '   <br>'+
                         '   <h5 class="no-margin m-b-10 bold"><span class="procedure-name">Documente</span></h5>'+
                         '   <br>'+
                         '   </div>'+
@@ -1029,11 +1148,6 @@ exports.deleteProcedure = function(req, res, next)
                       }
                       res.send(Result);
                     }
-                    else {
-                      console.log("invalid prcedure number");
-                      res.sendStatus(500);
-                      return false;
-                    }
               }
           });
     });
@@ -1041,3 +1155,348 @@ exports.deleteProcedure = function(req, res, next)
     WSrequest.write(reqData);
     WSrequest.end();
     }
+
+
+    exports.changeStatus = function(req, res, next)
+    {
+      if (req.sessionID == "" || req.sessionID == "undefined" || req.body.id == "" || req.body.id == "undefined")
+      {
+        console.log("Bad Paramater for changeStatus");
+        res.sendStatus(500);
+        return false;
+      }
+
+    var WSoptions =
+      {
+            host: ConfigFile.WebServiceIP,
+            path: ConfigFile.WebServiceURLDIR+'/BRMWrite.svc/execute/Procedures/setProcedureStatus',
+            port: ConfigFile.WebServicePORT,
+            method: 'POST',
+            headers:
+              {
+                'Content-Type': 'text/plain'
+              }
+      };
+
+    var reqData = JSON.stringify
+      (
+        {
+              "SessionId": req.sessionID,
+              "currentState": "login",
+              "objects":
+                  [
+                    {"Arguments": {"ID_Procedure":req.body.id,"Status":"review"}}
+                  ]
+          }
+      );
+
+      var WSrequest = http.request(WSoptions, function(WSres)
+        {
+            var data = '';
+            WSres.on('data', function(chunk)
+              {
+                  data += chunk;
+              });
+            WSres.on('end', function()
+              {
+
+                if( ServerCache.testJSON(data) == false)
+                {
+                  console.log(data);
+                  res.sendStatus(500);
+                  return false;
+                }
+
+                data = JSON.parse(data);
+
+                  if(data.Result == "Security Audit Failed" || data === 'undefined')
+                      {
+                            console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+                            res.redirect ('/logout');
+                      }
+
+                  else if (data.ErrorCode != 0 || data === 'undefined')
+                      {
+                          res.send("ErrorCode: "+JSON.stringify(data.Result));
+                      }
+
+                  else
+                    {
+                      ServerCache.replaceProcedure(req.body.id);
+                      setTimeout(function(){res.sendStatus(200); res.io.emit ("socketToMe", "NewProcedure");}, 1000);
+
+                    }
+              });
+        });
+
+      WSrequest.write(reqData);
+      WSrequest.end();
+
+      };
+
+
+      exports.setWinner = function(req, res, next)
+      {
+      	console.log("In setWinner...");
+        if (req.sessionID == "" || req.sessionID == "undefined" || req.body.id == "" || req.body.id == "undefined")
+        {
+          console.log("Bad Paramater for changeStatus");
+          res.sendStatus(500);
+          return false;
+        }
+
+      var WSoptions =
+        {
+              host: ConfigFile.WebServiceIP,
+              path: ConfigFile.WebServiceURLDIR+'/BRMWrite.svc/execute/Procedures/setProcedureStatus',
+              port: ConfigFile.WebServicePORT,
+              method: 'POST',
+              headers:
+                {
+                  'Content-Type': 'text/plain'
+                }
+        };
+
+      var reqData = JSON.stringify
+        (
+          {
+                "SessionId": req.sessionID,
+                "currentState": "login",
+                "objects":
+                    [
+                      {"Arguments": {"ID_Procedure":req.body.ID_Procedure,"ID_AgencyWinner":req.body.ID_Agency,"Status":"closed"}}
+                    ]
+            }
+        );
+
+        var WSrequest = http.request(WSoptions, function(WSres)
+          {
+              var data = '';
+              WSres.on('data', function(chunk)
+                {
+                    data += chunk;
+                });
+              WSres.on('end', function()
+                {
+		   console.log("end");
+                  if( ServerCache.testJSON(data) == false)
+                  {
+                    console.log(data);
+                    res.sendStatus(500);
+                    return false;
+                  }
+
+                  data = JSON.parse(data);
+
+                    if(data.Result == "Security Audit Failed" || data === 'undefined')
+                        {
+                              console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+                              res.redirect ('/logout');
+                        }
+
+                    else if (data.ErrorCode != 0 || data === 'undefined')
+                        {
+                            console.log("ErrorCode: "+JSON.stringify(data.Result));
+                            res.send("ErrorCode: "+JSON.stringify(data.Result));
+                        }
+
+                    else
+                      {
+                      	console.log("inainte de timeout");		
+                          ServerCache.replaceProcedure(req.body.ID_Procedure);
+                          setTimeout(function(){ 
+                          console.log("in timeout");	
+                          var NewProcedureZ = ServerCache.getProcedurebyID(req.body.ID_Procedure);
+                          Mailer.sendMail(NewProcedureZ.AgencyWinnerEmail,'Ati castigat Procedura','<p> Closed </p>');
+                          
+                          
+                          res.sendStatus(200); res.io.emit ("socketToMe", "NewProcedure");}, 2000);
+                          console.log("dupa timeout");	
+                          
+  //                      ServerCache.replaceProcedure(req.body.id);                      	
+   //                     setTimeout(function()
+   //                     	{
+//		                      	TMPProcedure = ServerCache.getProcedureByID(req.body.id);
+//		                      	eml = TMPProcedure.AgencyWinnerEmail;
+//		                      	console.log("email agency winner"+elm)                  	
+//                		        Mailer.sendMail(eml,'Ati castigat Procedura  '+ TMPProcedure.Name +' !','<p> Closed </p>');
+ //                       
+ //               		        res.sendStatus(200); res.io.emit ("socketToMe", "NewProcedure");
+ //               		}, 
+ //               		1000);
+
+                      }
+                });
+          });
+
+        WSrequest.write(reqData);
+        WSrequest.end();
+
+        };
+
+
+        exports.ApproveProcedure = function(req, res, next)
+        {
+          if (req.sessionID == "" || req.sessionID == "undefined" || req.body.id == "" || req.body.id == "undefined")
+          {
+            console.log("Bad Paramater for changeStatus");
+            res.sendStatus(500);
+            return false;
+          }
+
+        if (req.session.User.UserRole !== " Supraveghetor")
+          {
+            console.log("Someone that is not Supraveghetor tried to approve a procedure!");
+            res.redirect('/logout');
+            return false;
+          }
+
+          console.log("in approve");
+
+        var WSoptions =
+          {
+                host: ConfigFile.WebServiceIP,
+                path: ConfigFile.WebServiceURLDIR+'/BRMWrite.svc/execute/Procedures/setProcedureStatus',
+                port: ConfigFile.WebServicePORT,
+                method: 'POST',
+                headers:
+                  {
+                    'Content-Type': 'text/plain'
+                  }
+          };
+
+        var reqData = JSON.stringify
+          (
+            {
+                  "SessionId": req.sessionID,
+                  "currentState": "login",
+                  "objects":
+                      [
+                        {"Arguments": {"ID_Procedure":req.body.id,"Status":"approved"}}
+                      ]
+              }
+          );
+
+          var WSrequest = http.request(WSoptions, function(WSres)
+            {
+                var data = '';
+                WSres.on('data', function(chunk)
+                  {
+                      data += chunk;
+                  });
+                WSres.on('end', function()
+                  {
+
+                    if( ServerCache.testJSON(data) == false)
+                    {
+                      console.log(data);
+                      res.sendStatus(500);
+                      return false;
+                    }
+
+                    data = JSON.parse(data);
+
+                      if(data.Result == "Security Audit Failed" || data === 'undefined')
+                          {
+                                console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+                                res.redirect ('/logout');
+                          }
+
+                      else if (data.ErrorCode != 0 || data === 'undefined')
+                          {
+                              console.log("ErrorCode: "+JSON.stringify(data.Result));
+                              res.send("ErrorCode: "+JSON.stringify(data.Result));
+                          }
+
+                      else
+                        {
+                          console.log("in approved3");
+                          ServerCache.replaceProcedure(req.body.id);
+                          setTimeout(function(){res.sendStatus(200); res.io.emit ("socketToMe", "NewProcedure");}, 2000);
+                        }
+                  });
+            });
+
+          WSrequest.write(reqData);
+          WSrequest.end();
+
+          };
+
+/*
+          exports.setWinner = function(req, res, next)
+          {
+            if (req.sessionID == "" || req.sessionID == "undefined" || req.body.id == "" || req.body.id == "undefined")
+            {
+              console.log("Bad Paramater for changeStatus");
+              res.sendStatus(500);
+              return false;
+            }
+
+          var WSoptions =
+            {
+                  host: ConfigFile.WebServiceIP,
+                  path: ConfigFile.WebServiceURLDIR+'/BRMWrite.svc/execute/Procedures/setProcedureStatus',
+                  port: ConfigFile.WebServicePORT,
+                  method: 'POST',
+                  headers:
+                    {
+                      'Content-Type': 'text/plain'
+                    }
+            };
+
+          var reqData = JSON.stringify
+            (
+              {
+                    "SessionId": req.sessionID,
+                    "currentState": "login",
+                    "objects":
+                        [
+                          {"Arguments": {"ID_Procedure":req.body.ID_Procedure,"ID_AgencyWinner":req.body.ID_Agency,"Status":"closed"}}
+                        ]
+                }
+            );
+
+            var WSrequest = http.request(WSoptions, function(WSres)
+              {
+                  var data = '';
+                  WSres.on('data', function(chunk)
+                    {
+                        data += chunk;
+                    });
+                  WSres.on('end', function()
+                    {
+
+                      if( ServerCache.testJSON(data) == false)
+                      {
+                        console.log(data);
+                        res.sendStatus(500);
+                        return false;
+                      }
+
+                      data = JSON.parse(data);
+
+                        if(data.Result == "Security Audit Failed" || data === 'undefined')
+                            {
+                                  console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+                                  res.redire.ct ('/logout');
+                            }
+
+                        else if (data.ErrorCode != 0 || data === 'undefined')
+                            {
+                                res.send("ErrorCode: "+JSON.stringify(data.Result));
+                            }
+
+                        else
+                          {
+                            ServerCache.replaceProcedure(req.body.id);
+                            setTimeout(function(){res.sendStatus(200); res.io.emit ("socketToMe", "NewProcedure");}, 1000);
+                          }
+                    });
+              });
+
+            WSrequest.write(reqData);
+            WSrequest.end();
+
+            };
+            
+            */

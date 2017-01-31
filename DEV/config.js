@@ -1,3 +1,4 @@
+var path = require('path');
 var express = require ('express');
 var http = require ('http');
 var app = express ();
@@ -25,6 +26,11 @@ module.exports =
  NodeCacheMinProcedures: 100,
  NodeCacheMaxProcedures: 100,
  NodeCacheCleanInterval: (0.02 * 60000),   // Minutes
+ Mailerhost : "cpanel.4esoft.ro",
+ Mailerport: 465,
+ Maileruser : "bulie.octavian@kig.ro",
+ Mailerpass : "buliemm",
+ FileUploadDir: path.dirname(__filename)+"/uploads",
 }
 
 console.log("Webservice -> "+module.exports.WebServiceIP+":"+module.exports.WebServicePORT+module.exports.WebServiceURLDIR);

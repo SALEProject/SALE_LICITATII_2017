@@ -10,6 +10,7 @@ var path = require('path');
 var multer  = require('multer');
 var SecurityCheck = require('../controllers/CacheController');
 var CacheController = require('../controllers/CacheController');
+var ServerCache = CacheController.ServerCache;
 var AccountController = require('../controllers/AccountController');
 var AgencyController = require('../controllers/AgencyController');
 var ChatController = require('../controllers/ChatController');
@@ -17,18 +18,20 @@ var FavouriteController = require('../controllers/FavouriteController');
 var NotificationController = require('../controllers/NotificationController');
 var ProcedureController = require('../controllers/ProcedureController');
 var TimeController = require('../controllers/TimeController');
-var NodeMailerController = require('../controllers/NodeMailerController');
+var MailerController = require('../controllers/MailerController');
+var Mailer = require('../controllers/MailerController');
 var CatalogController = require('../controllers/CatalogController');
 var TestController = require('../controllers/TestController');
 var ProcedureFormsController = require('../controllers/ProcedureFormsController');
-// var UploadFileController = require('../controllers/UploadFileController');
 var DownloadController = require('../controllers/DownloadController');
 var FillProcedureParams = require('../controllers/FillProcedureParams');
+var DocumentController = require('../controllers/DocumentController');
 
 //working
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'D:/deving/uploads'); // Absolute path. Folder must exist, will not be created for you.
+    cb(null, ConfigFile.FileUploadDir); // Absolute path. Folder must exist, will not be created for you.
+    // cb(null, 'D:/deving/uploads'); // Absolute path. Folder must exist, will not be created for you.
   },
   filename: function (req, file, cb) {
        cb(null,Math.random().toString(36).substr(2, 5) +Date.now() + path.extname(file.originalname));
@@ -41,6 +44,20 @@ router.post('/api/upload/file', upload.any(), function(req,res,next) {
     console.log('files:', req.files);
     console.log('body:', req.body);
     // var ceva = req.files.path;
+    var DocName = req.body.DocName;
+    var AcceptedNames = {
+      "Referat de necesitate":true,
+      "Nota de fundamentare":true,
+      "Fisa de date":true,
+      "Caiet Saricini":true,
+      "Cerere de clarificare":true,
+      "Clarificare":true,
+      "Oferta":true,
+    };
+    if ( AcceptedNames[DocName] )
+    {
+      console.log(AcceptedNames[DocName]);
+
     var WSoptions =
       {
             host: ConfigFile.WebServiceIP,
@@ -101,8 +118,9 @@ router.post('/api/upload/file', upload.any(), function(req,res,next) {
 
               else
                 {
-                    // res.send("ok");
-                    res.send("ok");
+                  var Procedure = ServerCache.getProcedurebyID(req.body.ProcedureID);
+                  Mailer.sendMail('bulie.octavian@kig.ro','Sale.ro - Fisierul '+req.body.DocName+' a fost adaugat procedurii '+Procedure.Name+'!','<p> '+Procedure.OrganizationEmail+' '+Procedure.ContactEmail+' </p>');
+                  res.send("ok");
                 }
 
             });
@@ -111,8 +129,20 @@ router.post('/api/upload/file', upload.any(), function(req,res,next) {
 
     WSrequest.write(reqData);
     WSrequest.end();
+
+  }
+  else {
+    console.log("erroare nume fisier")
+    req.sendStatus(500);
+  }
   });
 
+
+
+router.post('/api/supraveghetor/approve', ProcedureController.ApproveProcedure);
+router.post('/api/procedure/winner', ProcedureController.setWinner);
+router.post('/api/document/get', DocumentController.DocumentDetails);
+router.post('/api/launchprocedure/post', ProcedureController.changeStatus);
 router.post('/api/download/downloadfile', DownloadController.getDocument);
 router.post('/api/generateDetails/get', ProcedureController.generateDetails);
 router.post('/api/fillprocedureparams/post', FillProcedureParams.getProcedureParams);
@@ -154,9 +184,6 @@ router.get('/api/agency/get', AgencyController.getAgencyDetails);
 
 //CatalogController
 router.post('/api/catalog/post', CatalogController.AddProduct);
-
-//NodeMailerController
-router.get('/api/nodemailer/get', NodeMailerController.sendMail);
 
 //ChatController
 router.get('/api/chat/get', ChatController.getChatHistory);

@@ -1,5 +1,81 @@
 window.document.onload = getProcedures();
-// getProcedureVariablesData();
+
+function DesemneazaCastigator()
+{
+
+  var Castigator = '';
+  Castigator = $("#offerbox").find('input[name=winnerradio]:checked').val();
+  if( typeof Castigator == "undefined" || Castigator == "")
+  {
+    alert("Selectati o oferta");
+    return false;
+  }
+
+  else {
+    // var element = $("#offerbox").find('input[name=winnerradio]:checked');
+    // console.log($("#offerbox").find('input[name=winnerradio]:checked').attr("rel"));
+    $.ajax({
+        url: '/api/document/get',
+        method: "post",
+        async: true,
+        data: JSON.stringify({'id':Castigator}),
+        contentType: "application/json",
+        success: function (data)
+                {
+                  $("#dialog").dialog({
+                      title: "Confirmati",
+                      open: function (event, ui) {
+                          console.log(data);
+                          var Question = data.message;
+                          $(this).html(Question);
+                          $(".ui-widget-overlay").css({
+                              opacity: 0.7,
+                              filter: "Alpha(Opacity=100)",
+                              backgroundColor: "black",
+                              zIndex: 999
+                          });
+                      },
+                      modal: true
+                  });
+
+                  $("#dialog").dialog({
+                      buttons: [
+                          {
+                              text: "Da", click: function () {
+                                console.log("sending"+ data.ID_Agency + data.ID_Procedure);
+                              $.ajax({
+                                  url: "/api/procedure/winner",
+                                  method: 'post',
+                                  async: true,
+                                  data: JSON.stringify({
+                                      ID_Procedure: data.ID_Procedure,
+                                      ID_Agency: data.ID_Agency,
+                                  }),
+                                  contentType: "application/json",
+                                  success: function (data) {
+                                    console.log(data);
+                                    $('#dialog').dialog("close");
+                                  }
+                              })
+                          }, style: "color:white;background-color:#99BB22;min-width: 100px;"
+                          },
+                          {
+                              text: "Nu", click: function () {
+                              $(this).dialog("close");
+                          }, style: "color:white;background-color:#ACACAC;min-width: 100px;"
+                          }
+                      ]
+                  }).prev(".ui-dialog-titlebar").css({background: "white", border: "none"})
+                  $(".ui-dialog-buttonpane").css({'text-align': 'center'});
+                  $(".ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset").css({'float': 'none', "align-items": "center"});
+                  $("#dialog").addClass('text-center');
+                  $(".ui-widget-content").css({'border': "none"});
+
+                },
+        });
+  }
+}
+
 
 function getProcedures() {
     $.ajax({
@@ -31,6 +107,7 @@ function getProcedureVariablesData(id)
       success: function (data) {
                         // console.log("FROM TEST"+JSON.stringify(data));
                         // $('#Form1').children().find('input:text, input:password, input:file, select, textarea').each(function() {$(this).remove();});
+                        $("#LaunchProcedure").attr('onclick', '');
                         $("#Form1ProcedureTotalValue").attr('onchange','');
                         $('.nav-tabs a:first').tab('show');
                         $("#procedure-detail-container").hide();
@@ -223,6 +300,7 @@ function generateDetails(id)
             contentType: "application/json",
             success: function(data)
                       {
+                        $('#catalog-produse').hide();
                         $('#procedures-container').hide();
                         $('#procedureDetailToggle').empty();
                         $('#procedureDetailToggle').append( data );
@@ -308,7 +386,7 @@ function generateDetails(id)
                     "ContestationsSubmission": NewFormProcedure.ContestationsSubmission,
                     "OtherInformation": NewFormProcedure.OtherInformation,
                     "Necessity": NewFormProcedure.Necessity,
-                    "ClassificationIDs": [1289,1692]
+                    "ClassificationIDs": NewFormProcedure.ClassificationIDs,
                 }),
                 contentType: "application/json",
                 success: function (data) {
@@ -327,6 +405,41 @@ function generateDetails(id)
     })
     }
 }
+
+
+
+function launchprocedure(id)
+{
+  $.ajax({
+      url: "/api/launchprocedure/post",
+      method: 'post',
+      async: true,
+      data: JSON.stringify({'id':id}),
+      contentType: "application/json",
+      success: function(data)
+                {
+                  btnShowAllProcedures();
+                }
+})
+}
+
+
+function approveProcedure(id)
+{
+  $.ajax({
+      url: '/api/supraveghetor/approve',
+      method: 'post',
+      async: true,
+      data: JSON.stringify({'id':id}),
+      contentType: "application/json",
+      success: function(data)
+                {
+                  btnShowAllProcedures();
+                }
+})
+}
+
+
 
             // else
             //     {

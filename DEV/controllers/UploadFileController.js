@@ -8,13 +8,21 @@ var session = require ('express-session');
 var sessionStore = new session.MemoryStore ();
 var AppFile = require('../app.js');
 var ConfigFile = require('../config.js');
-var CacheController = require('../controllers/CacheController.js')
+var CacheController = require('../controllers/CacheController.js');
 var ServerCache = CacheController.ServerCache;
-var multer = require('multer')
+var multer = require('multer');
+var Mailer = require('./MailerController.js');
 
 
 exports.Upload = function(req, res, next)
 {
+
+  Val = null;
+  if(req.body.OfferValue !== '' || req.body.OfferValue !== 'undefined')
+  {
+    Val = req.body.OfferValue
+  }
+
   console.log(req.sessionID);
   var WSoptions =
     {
@@ -45,7 +53,7 @@ exports.Upload = function(req, res, next)
                                       "Name": req.body.DocName,
                                       "DocumentURL": req.files[0].path,
                                       "Content":"z",
-                                      "Value": parseInt(req.body.OfferValue),
+                                      "Value": Val,
                                      }
                   }
                 ]
@@ -84,6 +92,10 @@ exports.Upload = function(req, res, next)
             else
               {
                   // res.send("ok");
+                  // var Procedure = ServerCache.getProcedurebyID(req.body.ProcedureID);
+                  // console.log(Procedure);
+                  //   // Mailer.sendMail('bulie.octavian@kig.ro','Sale.ro - Fisierul '+req.body.DocName+' a fost adaugat procedurii '+Procedure.Name+'!','<p> '+Procedure.OrganizationName+' '+Procedure.ContactEmail+' </p>');
+                  // Mailer.sendMail('bulie.octavian@kig.ro','Sale.ro','text');
                   res.send("ok");
               }
 

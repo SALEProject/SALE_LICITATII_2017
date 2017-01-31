@@ -13,6 +13,22 @@ var moment = require('moment');
 
 exports.getAlerts = function(req, res, next)
 {
+
+  if( typeof req.session.User == "undefined" || req.session.User == "" || req.session.User.UserRole == " Supraveghetor" )
+  {
+    res.send("ok");
+    return true;
+  }
+
+  if( typeof req.session.User == "undefined" || req.session.User == "" || typeof req.session.User.UserRole == "undefined" || req.session.User.UserRole == "" )
+  {
+    console.log("Session Not Found");
+    res.redirect("/logout");
+    return false;
+  }
+
+
+
   var Language = "RO";
   var output = "";
       if (typeof req.session.User == "undefined" || req.session.User == null)

@@ -240,7 +240,7 @@
 			<div class="tile white m-b-10" id="chat-container">
 	<div class="tile-title">
 		<div class="controller">
-			<a href="" class="extract pull-right m-l-15" title="Deschide in popup"><i class="fa fa-external-link"></i></a>
+			<!-- <a href="" class="extract pull-right m-l-15" title="Deschide in popup"><i class="fa fa-external-link"></i></a> -->
 		</div>
 		<h3 class="no-margin m-b-10"><i class="fa fa-comments"></i> Panou chat</h3>
 	</div>
@@ -560,9 +560,11 @@
 							<div class="col-md-3">
 								<label for="procedure-cpv">Clasificare</label>
 							</div>
+							
+							
               <div class="col-md-6">
                 <div class="controls">
-                <select rel="@Procedure.ClassificationIDs" multiple id="select" style="width:100%"> </select>
+               	 <input rel="@Procedure.FormProcedureClassificationIDs" name="FormProcedureClassificationIDs" id="Form1ProcedureClassificationIDs" onclick="" type="text" class="form-control input-sm required" value="" />
                 </div>
 							</div>
 						</div>
@@ -756,70 +758,19 @@
                   </div>
                   </div>
 
-				<div role="tabpanel" class="tab-pane" id="form-6">
-						<div class="row procedure-details-holder procedure-item">
-							<div class="col-md-6">
-								<h5>Denumire</h5>
-								<h4 rel="@Procedure.Name" id="Form6ProcedureName" name="FormProcedureName" class="procedure-name"></h4>
-								<br/>
-								<h5>Descriere</h5>
-								<p rel="@Procedure.Description" id="Form6ProcedureDescription" class="procedure-description" name="FormProcedureDescription"></p>
-								<br/>
-                <div class="my-form" id="procedure-form-docs"  data-step="6">
-                  <h5>Documente</h5>
-                  <div id="form-detail-documents" class="procedure-documents"></div>
-                  <div id="form-detail-upload" class="row">
-                    <div class="col-md-6">
-                      <div class="controls">
+                  <div role="tabpanel" class="tab-pane" id="form-6">
+                    <div class="my-form" id="procedure-form-6"  data-step="6">
+                      <input type="hidden" name="ID_Form" class="procedure-form-id" />
+                      <div class="form-content" id="form-6-content">
                       </div>
-                    </div>
+                    </input>
+                    <div class="text-center padding-20 loader"><img src="/img/loader-white.gif"></div>
                   </div>
-                </div>
-							</div>
-							<div class="col-md-5 col-md-offset-1">
-								<div class="row">
-									<div class="col-md-4">
-										<h5>Tip procedura</h5>
-									</div>
-									<div class="col-md-8">
-										<span rel="@Procedure.ID_ProcedureType" id="Form6ProcedureID_ProcedureType" name="FormProcedureID_ProcedureType" class="procedure-type"></span>
-                	</div>
-								</div>
-								<div class="row">
-									<div class="col-md-4">
-										<h5>Locatie</h5>
-									</div>
-									<div class="col-md-9">
-										<span rel="@Procedure.Location" id="Form6ProcedureLocation" name="FormProcedureLocation" class="procedure-location"></span>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<h5>Orar</h5>
-									</div>
-									<div class="col-md-11 col-md-offset-1">
-										<!-- <p class="procedure-time">Lansare<span  id="form-detail-launch" class="procedure-launch">~WHEN</span></p> -->
-										<p class="procedure-time">Clarificari pana la<span rel="@Options.ClarificationRequestsDeadline" id="Form6ProcedureClarificationRequestsDeadline" name='FormProcedureClarificationRequestsDeadline' class="procedure-clarifications"></span></p>
-										<p class="procedure-time">Termen depunere<span rel="@Options.TendersReceiptDeadline" id="Form6ProcedureTendersReceiptDeadline" name="FormProcedureTendersReceiptDeadline" class="procedure-deadline"></span></p>
-										<p class="procedure-time">Deschidere oferte<span rel="@Options.TendersOpeningDate" id="Form6ProcedureTendersOpeningDate" name="FormProcedureTendersOpeningDate" class="procedure-open-deadline"></span></p>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<h5>Coduri CPV</h5>
-										<span rel="@Procedure.ClassificationIDs" id="form-detail-cpvs"></span>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="clearfix"></div>
-          <div class="my-form" id="procedure-form-6"  data-step="6">
-            <input type="hidden" name="ID_Form" class="procedure-form-id" />
-						<div class="row form-row">
-							<div class="col-md-6 col-md-offset-3">
-								<button class="btn btn-primary" name="navigationButtonPrev">Pasul Precedent</button> <button class="btn btn-success btn-cons form-submit"  name="submit" value="save" data-step="6">Lanseaza procedura</button>
-							</div>
-						</div>
+  						<div class="row form-row">
+  							<div class="col-md-6 col-md-offset-3">
+  								<button class="btn btn-primary" name="navigationButtonPrev">Pasul Precedent</button> <button class="btn btn-success"  id="LaunchProcedure" value="save" data-step="6">Lanseaza procedura</button>
+  							</div>
+  						</div>
             <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
             <div class="input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span> <input class="form-control" style="max-width: 110px;" placeholder="Valoare in Lei" type="text" name="OfferValue">    <input class="btn btn-primary" type="submit" value="Upload" />
@@ -832,11 +783,11 @@
             <span  id="upload-file-info" ></span>
               </div>
               </form> -->
-
-              <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
+              <!-- <div id="UploadDiv">
+              <form method="post" name="fileoferta" onsubmit="return UploadFile(this);">
                   <label>Select a file:</label><br>
                     <input type="file" accept=".pdf" name="file" required />
-                    <input type="hidden" name="ProcedureID" value="6202">
+                    <input type="hidden" name="ProcedureID" value="">
                     <input type="hidden" name="DocName" value="Oferta">
                   <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-usd"></i></span> <input class="form-control" style="max-width: 110px;" type="text" name="OfferValue">
@@ -844,6 +795,38 @@
                     </span>
                   </div>
               </form>
+
+              <form method="post" name="filecerere" onsubmit="return UploadFile(this);">
+                  <label>Referat de necesitate</label><br>
+                    <input type="file" accept=".pdf" name="file" required />
+                    <input type="hidden" name="ProcedureID" value="">
+                    <input type="hidden" name="DocName" value="Referat de necesitate">
+                    <input type="submit" value="Upload" />
+              </form>
+
+
+              <form method="post" name="filecerere" onsubmit="return UploadFile(this);">
+                  <label>Nota de fundamentare</label><br>
+                    <input type="file" accept=".pdf" name="file" required />
+                    <input type="hidden" name="ProcedureID" value="">
+                    <input type="hidden" name="DocName" value="Nota de fundamentare">
+                    <input type="submit" value="Upload" />
+              </form>
+              <form method="post" name="filecerere" onsubmit="return UploadFile(this);">
+                  <label>Fisa de date</label><br>
+                    <input type="file" accept=".pdf" name="file" required />
+                    <input type="hidden" name="ProcedureID" value="">
+                    <input type="hidden" name="DocName" value="Fisa de date">
+                    <input type="submit" value="Upload" />
+              </form>
+              <form method="post" name="filecerere" onsubmit="return UploadFile(this);">
+                  <label>Caiet Saricini</label><br>
+                    <input type="file" accept=".pdf" name="file" required />
+                    <input type="hidden" name="ProcedureID" value="">
+                    <input type="hidden" name="DocName" value="Caiet Saricini">
+                    <input type="submit" value="Upload" />
+              </form>
+            </div> -->
 
             <!-- <form method="post" id="fileinfo" name="fileinfo" onsubmit="return submitForm();">
                 <label>Select a file:</label><br>
@@ -859,7 +842,7 @@
 			</div>
 			<div class="clearfix"></div>
 </div>
-			<div class="tile m-b-10 data-container" id="catalog-produse" style="display:none">
+			<div class="col-md-9 col-sm-9" id="catalog-produse" style="display:none">
 				<div class="tile white m-b-10">
 					<form id="FormCatalogProduse" class="login-form">
 						<div class="row form-row">
@@ -1097,9 +1080,9 @@ $(function(){
 		$(function () {
 			$('#filter-start').datetimepicker({format: 'YYYY-MM-DD'});
 			$('#filter-end').datetimepicker({format: 'YYYY-MM-DD'});
-			$('#Form1ProcedureTendersOpeningDate').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
-			$('#Form1ProcedureTendersReceiptDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
-			$('#Form1ProcedureClarificationRequestsDeadline').datetimepicker({format: 'YYYY-MM-DD HH:mm'});
+			$('#Form1ProcedureTendersOpeningDate').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+			$('#Form1ProcedureTendersReceiptDeadline').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
+			$('#Form1ProcedureClarificationRequestsDeadline').datetimepicker({format: 'YYYY-MM-DDTHH:mm'});
 		});
 
 
@@ -1247,9 +1230,9 @@ $(function(){
 //     return false;
 // });
 
-function submitForm() {
+function UploadFile(element) {
      console.log("submit event");
-     var fd = new FormData(document.getElementById("fileinfo"));
+     var fd = new FormData(element);
      fd.append("label", "WEBUPLOAD");
      $.ajax({
        url: "/api/upload/file",
@@ -1260,7 +1243,8 @@ function submitForm() {
      }).done(function( data ) {
         if( data = "ok")
         {
-          $('#fileinfo').replaceWith('<p>'+data+'</p>');
+          $(element).replaceWith('<h5>' +'Fisierul ' +$(element).find("input[name='DocName']").val()+' a fost adaugat! </h5>');
+
         }
         else alert("Upload Failed");
      });

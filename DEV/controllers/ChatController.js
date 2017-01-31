@@ -15,6 +15,20 @@ var moment = require('moment');
 exports.getChatHistory = function(req, res, next)
 {
 
+  if( typeof req.session.User == "undefined" || req.session.User == "" || typeof req.session.User.UserRole == "undefined" || req.session.User.UserRole == "" )
+  {
+    console.log("Session Not Found");
+    res.redirect("/logout");
+    return false;
+  }
+
+  if( req.session.User.UserRole == " Supraveghetor" )
+  {
+    res.send("ok");
+    return true;
+  }
+
+
 var WSoptions =
   {
         host: ConfigFile.WebServiceIP,
@@ -30,7 +44,7 @@ var WSoptions =
 var reqData = JSON.stringify
   (
     {
-          "SessionId": ConfigFile.WebServiceSessionID,
+          "SessionId": req.sessionID,
           "currentState": "login",
           "objects":
               [
@@ -66,13 +80,19 @@ var reqData = JSON.stringify
 
               else if (data.ErrorCode != 0 || data === 'undefined')
                   {
-                      res.sendStatus("ErrorCode: "+data.Result);
+                      console.log("ErrorCode: "+JSON.stringify(data.Result));
+                      res.send("ErrorCode: "+data.Result);
                   }
 
             else
               {
-                res.send(data.Result);
-
+                var Result = '';
+                for (var i = 0; i < data.Result.Rows.length; i++)
+                  {
+                    Result += '<li class="chat-message" id=chat-item-' + data.Result.Rows[i].ID + '><div class=' + data.Result.Rows[i].Date + '>' + moment(data.Result.Rows[i].Date).format("HH:mm") + ' ' + data.Result.Rows[i].LoginName + ': ' + data.Result.Rows[i].Message + '</li>';
+                  }
+                 console.log(JSON.stringify(data));
+                 res.send(Result);
               }
 
           });
@@ -89,6 +109,13 @@ var reqData = JSON.stringify
 
 exports.addChatMessage = function(req, res, next)
 {
+  if( req.session.User == "undefined" || req.session.User == "" || req.session.User.ID_Client == "undefined" || req.session.User.ID_Client == "" )
+  {
+    console.log("Session Not Found");
+    res.redirect("/logout");
+    return false;
+  }
+
 
 var WSoptions =
   {
@@ -146,7 +173,7 @@ var WSrequest = http.request(WSoptions, function(WSres)
 
             else if (data.ErrorCode != 0 || data === 'undefined')
                 {
-                    res.sendStatus("ErrorCode: "+data.Result);
+                    res.send("ErrorCode: "+data.Result);
                 }
           else
             {

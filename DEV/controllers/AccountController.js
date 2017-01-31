@@ -55,6 +55,7 @@ exports.LoginGET = function(req, res, next) {
 
               data = JSON.parse(data);
                 if (data.Result.Success != true || data == 'undefined') {
+                    console.log("in acc");
                     req.session.destroy();
                     res.redirect('/login');
                 } else {
@@ -77,6 +78,7 @@ exports.LoginGET = function(req, res, next) {
 
 
     function getUserFavProcedures() {
+
         var WSoptions = {
             host: ConfigFile.WebServiceIP,
             path: ConfigFile.WebServiceURLDIR + '/BRMRead.svc/select/Procedures/getFavouriteProcedures',
@@ -145,6 +147,9 @@ exports.LoginGET = function(req, res, next) {
 };
 
 exports.LoginPOST = function(req, res, next) {
+
+
+
     var WSoptions = {
         host: ConfigFile.WebServiceIP,
         path: ConfigFile.WebServiceURLDIR + '/BRMLogin.svc/login',
@@ -184,9 +189,9 @@ exports.LoginPOST = function(req, res, next) {
 
           data = JSON.parse(data);
             if (data.Result.Success != true || data == 'undefined') {
-                // req.session.destroy ();
-                // req.session = null;
-                // res.redirect ('/login');
+                req.session.destroy ();
+                req.session = null;
+                res.redirect ('/login');
             } else {
 
 

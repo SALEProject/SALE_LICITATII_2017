@@ -7,214 +7,271 @@ var session = require('express-session');
 var sessionStore = new session.MemoryStore();
 var AppFile = require('../app.js');
 var ConfigFile = require('../config.js');
-var CacheController = require('../controllers/CacheController.js')
+var CacheController = require('../controllers/CacheController.js');
+var Mailer = require('./MailerController.js');
 var ServerCache = CacheController.ServerCache;
 var moment = require('moment');
-// var SecurityCheck = require('../controllers/SecurityCheck.js');
-//ServerCache.getProcedureVariables(4192,function (response) {
-// res.send(response) });
-// {
-//   res.send(ServerCache["ID_ContractTypeFIXED"]);
-// }
 
-// {
-//   var FileName = "Document.pdf";
-//   if( req.body.filename )
-//       {
-//         FileName = req.body.filename;
-//       }
-//
-//   if( req.body.path )
-//   {
-//       // res.download( req.body.path, FileName);
-//       res.download('D:\\deving\\uploads\\t6xyg1484736091818.doc', FileName);
-//   }
-//
-//   else {
-//       // res.send(500);
-//       res.download('D:\\deving\\uploads\\t6xyg1484736091818.doc', FileName);
-//   }
-//
-// }
 exports.test = function(req, res, next)
 
+// console.log("123333"+JSON.stringify(ServerCache.getProcedurebyID(5196)));
+
+// res.send(ServerCache.getProcedurePromise(5196));
+// var Procedura = '';
+
+// var Procedure = 5196;
+// var len = ServerCache.Procedures.length;
+// for (var i = 0; i < len ; i++)
+//   {
+//     if(ServerCache.Procedures[i].ID == Procedure )
+//       {
+//         ServerCache.Procedures.splice(i, 1);
+//       }
+//   }
+
+
+// for (var i = 0; i < ServerCache.Procedures.length; i++)
+// {
+//   if(ServerCache.Procedures[i].ID == Procedure )
+//     {
+//         ServerCache.Procedures.splice(i, 1);
+        // ServerCache.getmeProcedure(Procedure)
+        // .then((data) => {
+        //    data[0]["TimeStamp"] = new Date().getTime();
+        //    return data;
+        //  })
+        // .then((data) => {
+        //    ServerCache.TranslatePromise(data);
+        //     return data;
+        //   })
+        // .then((data) => {
+        //    ServerCache.Procedures.push(data[0]);
+        //  })
+        //   ServerCache.Procedures
+        // .then((data) => {
+        //    res.send(ServerCache.getProcedurebyID(Procedure));
+        //  })
+        // .catch(function (err) {
+        //     console.log(err.stack);
+        //     res.status(500).send(err.message);
+        //  });
+        //  return true;
+//     }
+//   }
+// }
+
+
+
 {
 
+// var id = 5196;
+//     ServerCache.getmeProcedure(5196)
+//     .then((data) => {
+//        data[0]["TimeStamp"] = new Date().getTime();
+//        return data;
+//      })
+//     .then((data) => {
+//         data = ServerCache.TranslatePromise(data);
+//         return data;
+//       })
+//     .then((data) => {
+//         ServerCache.deleteFromCachePromise(id);
+//         return data;
+//       })
+//     .then((data) => {
+//         ServerCache.addToCachePromise(id);
+//         return data;
+//       })
+//     .then((data) =>
+//        res.send(data)
+//      })
+//     .catch(function (err) {
+//         console.log(err.stack);
+//         res.status(500).send(err.message);
+//      });
 
-var UserID = 161;
-var ProcedureID = 6202;
+ }
 
-// test documentzzzzzz
-console.log("in test controller");
 
-var WSoptions =
-{
-    host: ConfigFile.WebServiceIP,
-    path: ConfigFile.WebServiceURLDIR+'/BRMRead.svc/select/Procedures/getProcedureDocuments',
-    port: ConfigFile.WebServicePORT,
-    method: 'POST',
-    headers:
-      {
-        'Content-Type': 'text/plain'
-      }
-};
+  // Mailer.sendMail('bulie.octavian@kig.ro','ceva','<p> Sale.ro </p>');
+    // var Result = ServerCache.getmeProcedure(5196);
+    // console.log(Result);
+    // res.send( JSON.stringify(Result) );
 
-var reqData = JSON.stringify
-(
-{
-      "SessionId": ConfigFile.WebServiceSessionID,
-      "currentState": "login",
-      "objects":
-                [
-                  {
-                    Arguments:
-                    {
-                      "ID_Procedure": ProcedureID,
-                    }
-                  }
-                ]
-  }
-);
-
-var WSrequest = http.request(WSoptions, function(WSres)
-{
-    var data = '';
-    WSres.on('data', function(chunk)
-      {
-          data += chunk;
-      });
-    WSres.on('end', function()
-      {
-        if( ServerCache.testJSON(data) == false)
-        {
-          console.log(data);
-          res.sendStatus(500);
-          return false;
-        }
-
-        data = JSON.parse(data);
-
-          if(data.Result == "Security Audit Failed" || data === 'undefined')
-              {
-                    console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
-                    res.redirect ('/logout');
-              }
-
-          else if (data.ErrorCode != 0 || data === 'undefined')
-              {
-                  res.sendStatus("ErrorCode: "+JSON.stringify(data.Result));
-              }
-
-        else
-          {
-            //ALL OK
-            var Result = '';
-            var Oferta ='<h6> Oferte </h6>'+
-                        '<table class="table table-hover table-condensed">'+
-                        '<tr>'+
-                        '<th style="max-width: 250px">Data</th>'+
-                        '<th style="max-width: 250px">Ofertant</th>'+
-                        '<th style="max-width: 250px">Valoare</th>'+
-                        '<th style="max-width: 250px">Link</th>'+
-                        '</tr>';
-            var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
-                        '<table class="table table-hover table-condensed">'+
-                        '<tr>'+
-                        '<th style="max-width: 250px">Data</th>'+
-                        '<th style="max-width: 250px">Ofertant</th>'+
-                        '<th style="max-width: 250px">Link</th>'+
-                        '</tr>';
-
-            var Clarificari ='<h6> Clarificari </h6>'+
-                        '<table class="table table-hover table-condensed">'+
-                        '<tr>'+
-                        '<th style="max-width: 250px">Data</th>'+
-                        '<th style="max-width: 250px">Ofertant</th>'+
-                        '<th style="max-width: 250px">Link</th>'+
-                        '</tr>';
-
-            var Documente ='<h6> Documente </h6>'+
-                        '<table class="table table-hover table-condensed">'+
-                        '<tr>'+
-                        '<th style="max-width: 250px">Nume</th>'+
-                        '<th style="max-width: 250px">Data</th>'+
-                        '<th style="max-width: 250px">Autor</th>'+
-                        '<th style="max-width: 250px">Link</th>'+
-                        '</tr>';
-
-            for (var i = 0; i < data.Result.Rows.length; i++)
-            {
-              switch (data.Result.Rows[i].Name) {
-                case "Oferta":
-                Oferta += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-                  break;
-                case "Referat de necesitate":
-                Documente += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-                  break;
-                case "Nota de fundamentare":
-                Documente += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-                  break;
-                case "Fisa de date":
-                Documente += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-                  break;
-                case "Cerere de clarificare":
-                CerereClarificare += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-                  break;
-
-                  case "Clarificare":
-                  Clarificari += '<tr>'+
-                            '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                            '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                            '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                            '</tr>';
-                    break;
-                default:
-                Documente += '<tr>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
-                          '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
-                          '</tr>';
-
-              }
-            }
-            Oferta += '</table>';
-            Documente += '</table>';
-            CerereClarificare += '</table>';
-            Clarificari += '</table>';
-            Result += Oferta+Documente+CerereClarificare+Clarificari;
-            res.send(Result);
-          }
-      });
-});
-
-WSrequest.write(reqData);
-WSrequest.end();
-}
+// var UserID = 161;
+// var ProcedureID = 6202;
+//
+// // test documentzzzzzz
+// console.log("in test controller");
+//
+// var WSoptions =
+// {
+//     host: ConfigFile.WebServiceIP,
+//     path: ConfigFile.WebServiceURLDIR+'/BRMRead.svc/select/Procedures/getProcedureDocuments',
+//     port: ConfigFile.WebServicePORT,
+//     method: 'POST',
+//     headers:
+//       {
+//         'Content-Type': 'text/plain'
+//       }
+// };
+//
+// var reqData = JSON.stringify
+// (
+// {
+//       "SessionId": ConfigFile.WebServiceSessionID,
+//       "currentState": "login",
+//       "objects":
+//                 [
+//                   {
+//                     Arguments:
+//                     {
+//                       "ID_Procedure": ProcedureID,
+//                     }
+//                   }
+//                 ]
+//   }
+// );
+//
+// var WSrequest = http.request(WSoptions, function(WSres)
+// {
+//     var data = '';
+//     WSres.on('data', function(chunk)
+//       {
+//           data += chunk;
+//       });
+//     WSres.on('end', function()
+//       {
+//         if( ServerCache.testJSON(data) == false)
+//         {
+//           console.log(data);
+//           res.sendStatus(500);
+//           return false;
+//         }
+//
+//         data = JSON.parse(data);
+//
+//           if(data.Result == "Security Audit Failed" || data === 'undefined')
+//               {
+//                     console.log(" CHAT CONTROLLER FAILED !! "+JSON.stringify(data));
+//                     res.redirect ('/logout');
+//               }
+//
+//           else if (data.ErrorCode != 0 || data === 'undefined')
+//               {
+//                   res.sendStatus("ErrorCode: "+JSON.stringify(data.Result));
+//               }
+//
+//         else
+//           {
+//             //ALL OK
+//             var Result = '';
+//             var Oferta ='<h6> Oferte </h6>'+
+//                         '<table class="table table-hover table-condensed">'+
+//                         '<tr>'+
+//                         '<th style="max-width: 250px">Data</th>'+
+//                         '<th style="max-width: 250px">Ofertant</th>'+
+//                         '<th style="max-width: 250px">Valoare</th>'+
+//                         '<th style="max-width: 250px">Link</th>'+
+//                         '</tr>';
+//             var CerereClarificare ='<h6> Cerere de clarificare </h6>'+
+//                         '<table class="table table-hover table-condensed">'+
+//                         '<tr>'+
+//                         '<th style="max-width: 250px">Data</th>'+
+//                         '<th style="max-width: 250px">Ofertant</th>'+
+//                         '<th style="max-width: 250px">Link</th>'+
+//                         '</tr>';
+//
+//             var Clarificari ='<h6> Clarificari </h6>'+
+//                         '<table class="table table-hover table-condensed">'+
+//                         '<tr>'+
+//                         '<th style="max-width: 250px">Data</th>'+
+//                         '<th style="max-width: 250px">Ofertant</th>'+
+//                         '<th style="max-width: 250px">Link</th>'+
+//                         '</tr>';
+//
+//             var Documente ='<h6> Documente </h6>'+
+//                         '<table class="table table-hover table-condensed">'+
+//                         '<tr>'+
+//                         '<th style="max-width: 250px">Nume</th>'+
+//                         '<th style="max-width: 250px">Data</th>'+
+//                         '<th style="max-width: 250px">Autor</th>'+
+//                         '<th style="max-width: 250px">Link</th>'+
+//                         '</tr>';
+//
+//             for (var i = 0; i < data.Result.Rows.length; i++)
+//             {
+//               switch (data.Result.Rows[i].Name) {
+//                 case "Oferta":
+//                 Oferta += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Value+' lei</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//                   break;
+//                 case "Referat de necesitate":
+//                 Documente += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//                   break;
+//                 case "Nota de fundamentare":
+//                 Documente += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//                   break;
+//                 case "Fisa de date":
+//                 Documente += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//                   break;
+//                 case "Cerere de clarificare":
+//                 CerereClarificare += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//                   break;
+//
+//                   case "Clarificare":
+//                   Clarificari += '<tr>'+
+//                             '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                             '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                             '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                             '</tr>';
+//                     break;
+//                 default:
+//                 Documente += '<tr>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].Name+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+moment(data.Result.Rows[i].LastModifiedDate).format("YYYY-MM-DD HH:mm")+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;">'+data.Result.Rows[i].AgencyName+'</td>'+
+//                           '<td style="max-width: 250px;font-size: 13px;"><button class="btn btn-success" onclick="DownloadDocument('+data.Result.Rows[i].ID+','+ProcedureID+');">Download</button></td>'+
+//                           '</tr>';
+//
+//               }
+//             }
+//             Oferta += '</table>';
+//             Documente += '</table>';
+//             CerereClarificare += '</table>';
+//             Clarificari += '</table>';
+//             Result += Oferta+Documente+CerereClarificare+Clarificari;
+//             res.send(Result);
+//           }
+//       });
+// });
+//
+// WSrequest.write(reqData);
+// WSrequest.end();
+// }
 
 // {
 //       var UserID = 161;
